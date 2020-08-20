@@ -1,4 +1,4 @@
-""""
+"""
  SymApiToExcel
 
  Transforme la symapi d'une baie en fichier XML
@@ -7,7 +7,7 @@
 
  Developped during off hours (vacations)
  Code is licences under GNU GPL v3
-""""
+"""
 
 import logging
 import copy
@@ -18,7 +18,7 @@ import openpyxl
 from openpyxl import Workbook
 from shutil import copyfile
 
-""""
+"""
 Initialize logging
 
 
@@ -28,18 +28,18 @@ Per default in the file :
 File is more for debug purposes.
 In case of issue, truncate the log file or upgrade the logger level to Fatal
 
-""""
+"""
 logging.config.fileConfig('SymApiToExcel.logging')
 logger = logging.getLogger('root')
 
-""""
+"""
 Initialize constants for the programs.
 Mainly ou will find here SymCli commands
 
 -out xml specified output in XML that will be parsed
 variable %% %% is peace of text that will be later replace byt the parameter value. (mainly sid's)
 
-""""
+"""
 SymcfgList = 'symcfg list -v -output xml'
 SymcfgEfficiency = 'symcfg -sid %%sid%% -srp -efficiency list -output xml'
 SymcfgDemand = 'symcfg -sid %%sid%% list  -demand -v -tb -out xml'
@@ -51,7 +51,7 @@ SymDevList = 'symdev list -sid %%sid%%  -v -out xml '
 Supported_Platform = ['VMAX250F' , 'VMAX950F', 'VMAX450F', 'VMAX850F', 'PowerMax_8000', 'PowerMax_2000']
 
 
-""""
+"""
 meObjets : mother class for all custom objects.
 
 you will find static methoods for code refactoring (why do it 10 times when you can write once and call many (find / findall)
@@ -60,7 +60,7 @@ You will also find toString methods that transform an object to string listing a
 if an attrivute is a list, then data are not printed.
 
 
-""""
+"""
 class mesObjets:
 
     def toString(self):
@@ -106,7 +106,7 @@ class mesObjets:
 
         return result
 
-""""
+"""
 class for the physical spindles
 
 Aim it to list all disks in the symmetrix, size, vendor and revision.
@@ -115,7 +115,7 @@ No special methods except :
 loadfromXML and loadfrom command (symdisk).
 loadfromXML do the mapping from XML to Object
 
-""""
+"""
 class disk(mesObjets):
     ident = ""
     da_number = ""
@@ -152,7 +152,7 @@ class disk(mesObjets):
         return listDisks
 
 
-""""
+"""
 class for the storageGroup (list of devices altogether
 A storage groups holds the compression flag (to be or not compressed
 
@@ -162,7 +162,7 @@ No special methods except :
 loadfromXML and loadfrom command (symsg).
 loadfromXML do the mapping from XML to Object
 
-""""
+"""
 class storageGroup(mesObjets):
     name = ""
     emulation = ""

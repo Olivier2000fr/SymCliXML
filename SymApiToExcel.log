@@ -10201,3 +10201,10 @@
 2020-08-20 22:07:31,068 - root - INFO - RunALL : symsg list -v -sid 000297700089 -out xml
 2020-08-20 22:07:31,068 - root - INFO - FilterAll : SG
 2020-08-20 22:07:52,663 - root - INFO - End
+2020-08-20 23:11:19,815 - root - INFO - Start
+2020-08-20 23:11:19,816 - root - INFO - RunALL : symcfg list -v -output xml
+2020-08-20 23:11:19,816 - root - INFO - FilterAll : Symmetrix
+2020-08-20 23:11:21,085 - root - INFO - Run : symcfg -sid 000297700096 -srp -efficiency list -output xml
+2020-08-20 23:11:21,086 - root - INFO - Filter : Symmetrix/SRP/SRP_Info
+2020-08-20 23:11:22,265 - root - INFO - Run : symcfg -sid 000297700096 list  -demand -v -tb -out xml
+2020-08-20 23:11:22,265 - root - INFO - Filter : Symmetrix
