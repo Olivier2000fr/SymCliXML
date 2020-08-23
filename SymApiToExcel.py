@@ -50,6 +50,7 @@ SymDevShow = 'symdev show -sid %%sid%%  %%device%% -out xml '
 SymDevList = 'symdev list -sid %%sid%%  -v -out xml '
 SymCfgListMemory = 'symcfg -sid %%sid%%  list -memory -out xml'
 SymCfgListFa = 'symcfg -sid %%sid%%  list -fa all -v -out xml'
+SymCfgListRa = 'symcfg -sid %%sid%%  list -ra all -v -out xml'
 Supported_Platform = ['VMAX250F', 'VMAX950F', 'VMAX450F', 'VMAX850F', 'PowerMax_8000', 'PowerMax_2000']
 
 
@@ -150,6 +151,52 @@ class frontEndPorts(mesObjets):
                 listFEPorts.append(frontEndPorts.loadSymmetrixFromXML(fe,dir_name))
         return listFEPorts
 
+class replicationPorts(mesObjets):
+    """
+    class for the FE ports (Frontend FC) FA Emulation
+
+    Aim it to list all available Frontend Ports
+
+    No special methods except :
+    loadfromXML and loadfrom command (symdisk).
+    loadfromXML do the mapping from XML to Object
+
+    """
+    dir_name = ""
+    port = 0
+    port_status = ""
+    negotiated_speed = 0
+    maximum_speed = 0
+    rdfList = ""
+
+    @staticmethod
+    def loadSymmetrixFromXML(feXML,director_name):
+        newFE = replicationPorts()
+        newFE.dir_name = director_name
+        port_type=feXML.find("Port_Info")
+        newFE.port = int(port_type.find("port").text)
+        newFE.negotiated_speed = mesObjets.ifNAtoInt(port_type.find("negotiated_speed").text)
+        newFE.maximum_speed = mesObjets.ifNAtoInt(port_type.find("maximum_speed").text)
+        #newFE.port_wwn = port_type.find("port_wwn").text
+        newFE.port_status = port_type.find("port_status").text
+        newFE.rdfList=""
+        for rdf in feXML.findall("RDF"):
+            remote_symid = rdf.find("remote_symid").text
+            ra_group_num = rdf.find("ra_group_num").text
+            remote_ra_group_num = rdf.find("remote_ra_group_num").text
+            newFE.rdfList=newFE.rdfList+"Remote : "+remote_symid+" (from RaGroup : "+ra_group_num+" to remote RaGroup : "+ remote_ra_group_num + ") / "
+        return newFE
+
+    @staticmethod
+    def loadFromCommand(sid) -> list:
+        toRun = SymCfgListRa.replace('%%sid%%', sid)
+        listRAPorts = []
+        for director in mesObjets.runFindall(toRun, 'Symmetrix/Director'):
+            dir_info = director.find("Dir_Info")
+            dir_name = dir_info.find("symbolic").text
+            for fe in director.findall("Port"):
+                listRAPorts.append(replicationPorts.loadSymmetrixFromXML(fe,dir_name))
+        return listRAPorts
 
 
 class disk(mesObjets):
@@ -358,6 +405,7 @@ class tdev(mesObjets):
         # Device not Found
         if details == "":
             logger.debug("Skip -- Device has no details")
+            newTdev.status = "UNK"
             return newTdev
 
         Dev_Info = details.find("Dev_Info")
@@ -454,6 +502,7 @@ class symmetrix(mesObjets):
     list_devices = []
     list_sgs = []
     list_fes = []
+    list_ras = []
     nb_engine = 0
     nb_cache_raw_tb = 0
 
@@ -564,6 +613,11 @@ class symmetrix(mesObjets):
         #
         newSymmtrix.list_fes=frontEndPorts.loadFromCommand(newSymmtrix.symid)
 
+        #
+        # grab the RE / RF pors (frontend FC emulation)
+        #
+        newSymmtrix.list_ras = replicationPorts.loadFromCommand(newSymmtrix.symid)
+
         return newSymmtrix
 
 
@@ -633,6 +687,7 @@ for symm in mesObjets.runFindall(SymcfgList, 'Symmetrix'):
                 ListToXLS(feuille, cell, "%%list.tdevs.", MySymm.list_devices)
                 ListToXLS(feuille, cell, "%%list.sgs.", MySymm.list_sgs)
                 ListToXLS(feuille, cell, "%%list.fes.", MySymm.list_fes)
+                ListToXLS(feuille, cell, "%%list.ras.", MySymm.list_ras)
 
     #
     # Save File

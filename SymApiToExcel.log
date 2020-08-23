@@ -14337,3 +14337,912 @@
 2020-08-23 10:15:51,242 - root - INFO - Filter : Symmetrix/Symm_Info
 2020-08-23 10:15:52,174 - root - INFO - RunALL : symcfg -sid 000297700089  list -fa all -v -out xml
 2020-08-23 10:15:52,175 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 10:16:10,252 - root - INFO - End
+2020-08-23 10:44:01,559 - root - INFO - Start
+2020-08-23 10:44:01,560 - root - INFO - RunALL : symcfg list -v -output xml
+2020-08-23 10:44:01,560 - root - INFO - FilterAll : Symmetrix
+2020-08-23 10:44:02,620 - root - INFO - Run : symcfg -sid 000297700096 -srp -efficiency list -output xml
+2020-08-23 10:44:02,620 - root - INFO - Filter : Symmetrix/SRP/SRP_Info
+2020-08-23 10:44:03,551 - root - INFO - Run : symcfg -sid 000297700096 list  -demand -v -tb -out xml
+2020-08-23 10:44:03,551 - root - INFO - Filter : Symmetrix
+2020-08-23 10:44:04,445 - root - INFO - RunALL : symdisk list -sid 000297700096 -out xml
+2020-08-23 10:44:04,445 - root - INFO - FilterAll : Symmetrix/Disk
+2020-08-23 10:44:05,404 - root - INFO - RunALL : symdev list -sid 000297700096  -v -out xml 
+2020-08-23 10:44:05,405 - root - INFO - FilterAll : Symmetrix/Device
+2020-08-23 10:44:09,736 - root - INFO - NB elt : 962
+2020-08-23 10:44:09,736 - root - INFO - RunALL : symcfg -sid 000297700096 list -tdev -out xml
+2020-08-23 10:44:09,736 - root - INFO - FilterAll : Symmetrix/ThinDevs/Device
+2020-08-23 10:44:10,928 - root - INFO - NB elt : 996
+2020-08-23 10:44:10,929 - root - ERROR - Device not found : 00002
+2020-08-23 10:44:10,929 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,930 - root - ERROR - Device not found : 00003
+2020-08-23 10:44:10,930 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,931 - root - ERROR - Device not found : 00004
+2020-08-23 10:44:10,931 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,931 - root - ERROR - Device not found : 00005
+2020-08-23 10:44:10,931 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,932 - root - ERROR - Device not found : 00006
+2020-08-23 10:44:10,932 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,933 - root - ERROR - Device not found : 00007
+2020-08-23 10:44:10,933 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,933 - root - ERROR - Device not found : 00008
+2020-08-23 10:44:10,933 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,934 - root - ERROR - Device not found : 00009
+2020-08-23 10:44:10,934 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,935 - root - ERROR - Device not found : 0000A
+2020-08-23 10:44:10,935 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,935 - root - ERROR - Device not found : 0000B
+2020-08-23 10:44:10,936 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,936 - root - ERROR - Device not found : 0000C
+2020-08-23 10:44:10,936 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,937 - root - ERROR - Device not found : 0000D
+2020-08-23 10:44:10,937 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,938 - root - ERROR - Device not found : 0000E
+2020-08-23 10:44:10,938 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,938 - root - ERROR - Device not found : 0000F
+2020-08-23 10:44:10,939 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,939 - root - ERROR - Device not found : 00010
+2020-08-23 10:44:10,939 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,940 - root - ERROR - Device not found : 00011
+2020-08-23 10:44:10,940 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,941 - root - ERROR - Device not found : 00012
+2020-08-23 10:44:10,941 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,941 - root - ERROR - Device not found : 00013
+2020-08-23 10:44:10,941 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,942 - root - ERROR - Device not found : 00014
+2020-08-23 10:44:10,942 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,943 - root - ERROR - Device not found : 00015
+2020-08-23 10:44:10,943 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,944 - root - ERROR - Device not found : 00016
+2020-08-23 10:44:10,944 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,944 - root - ERROR - Device not found : 00017
+2020-08-23 10:44:10,944 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,945 - root - ERROR - Device not found : 00018
+2020-08-23 10:44:10,945 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,946 - root - ERROR - Device not found : 00019
+2020-08-23 10:44:10,946 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,947 - root - ERROR - Device not found : 0001A
+2020-08-23 10:44:10,947 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,948 - root - ERROR - Device not found : 0001B
+2020-08-23 10:44:10,948 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,949 - root - ERROR - Device not found : 0001C
+2020-08-23 10:44:10,949 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,950 - root - ERROR - Device not found : 0001D
+2020-08-23 10:44:10,950 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,951 - root - ERROR - Device not found : 0001E
+2020-08-23 10:44:10,951 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,952 - root - ERROR - Device not found : 0001F
+2020-08-23 10:44:10,953 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,954 - root - ERROR - Device not found : 00020
+2020-08-23 10:44:10,954 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,955 - root - ERROR - Device not found : 00021
+2020-08-23 10:44:10,955 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,956 - root - ERROR - Device not found : 00022
+2020-08-23 10:44:10,956 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:10,957 - root - ERROR - Device not found : 00023
+2020-08-23 10:44:10,958 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:11,304 - root - INFO - RunALL : symsg list -v -sid 000297700096 -out xml
+2020-08-23 10:44:11,305 - root - INFO - FilterAll : SG
+2020-08-23 10:44:12,867 - root - INFO - Run : symcfg -sid 000297700096  list -memory -out xml
+2020-08-23 10:44:12,867 - root - INFO - Filter : Symmetrix/Symm_Info
+2020-08-23 10:44:13,736 - root - INFO - RunALL : symcfg -sid 000297700096  list -fa all -v -out xml
+2020-08-23 10:44:13,736 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 10:44:14,690 - root - INFO - RunALL : symcfg -sid 000297700096  list -ra all -v -out xml
+2020-08-23 10:44:14,690 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 10:44:30,846 - root - INFO - Run : symcfg -sid 000297700084 -srp -efficiency list -output xml
+2020-08-23 10:44:30,846 - root - INFO - Filter : Symmetrix/SRP/SRP_Info
+2020-08-23 10:44:31,672 - root - INFO - Run : symcfg -sid 000297700084 list  -demand -v -tb -out xml
+2020-08-23 10:44:31,672 - root - INFO - Filter : Symmetrix
+2020-08-23 10:44:32,753 - root - INFO - RunALL : symdisk list -sid 000297700084 -out xml
+2020-08-23 10:44:32,753 - root - INFO - FilterAll : Symmetrix/Disk
+2020-08-23 10:44:33,865 - root - INFO - RunALL : symdev list -sid 000297700084  -v -out xml 
+2020-08-23 10:44:33,865 - root - INFO - FilterAll : Symmetrix/Device
+2020-08-23 10:44:43,454 - root - INFO - NB elt : 2524
+2020-08-23 10:44:43,454 - root - INFO - RunALL : symcfg -sid 000297700084 list -tdev -out xml
+2020-08-23 10:44:43,454 - root - INFO - FilterAll : Symmetrix/ThinDevs/Device
+2020-08-23 10:44:45,416 - root - INFO - NB elt : 2558
+2020-08-23 10:44:45,418 - root - ERROR - Device not found : 00002
+2020-08-23 10:44:45,418 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,420 - root - ERROR - Device not found : 00003
+2020-08-23 10:44:45,420 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,421 - root - ERROR - Device not found : 00004
+2020-08-23 10:44:45,421 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,422 - root - ERROR - Device not found : 00005
+2020-08-23 10:44:45,422 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,423 - root - ERROR - Device not found : 00006
+2020-08-23 10:44:45,424 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,425 - root - ERROR - Device not found : 00007
+2020-08-23 10:44:45,425 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,426 - root - ERROR - Device not found : 00008
+2020-08-23 10:44:45,426 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,427 - root - ERROR - Device not found : 00009
+2020-08-23 10:44:45,427 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,428 - root - ERROR - Device not found : 0000A
+2020-08-23 10:44:45,429 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,430 - root - ERROR - Device not found : 0000B
+2020-08-23 10:44:45,430 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,431 - root - ERROR - Device not found : 0000C
+2020-08-23 10:44:45,431 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,432 - root - ERROR - Device not found : 0000D
+2020-08-23 10:44:45,432 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,434 - root - ERROR - Device not found : 0000E
+2020-08-23 10:44:45,434 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,435 - root - ERROR - Device not found : 0000F
+2020-08-23 10:44:45,435 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,436 - root - ERROR - Device not found : 00010
+2020-08-23 10:44:45,436 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,437 - root - ERROR - Device not found : 00011
+2020-08-23 10:44:45,438 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,439 - root - ERROR - Device not found : 00012
+2020-08-23 10:44:45,439 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,440 - root - ERROR - Device not found : 00013
+2020-08-23 10:44:45,440 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,441 - root - ERROR - Device not found : 00014
+2020-08-23 10:44:45,441 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,442 - root - ERROR - Device not found : 00015
+2020-08-23 10:44:45,443 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,444 - root - ERROR - Device not found : 00016
+2020-08-23 10:44:45,444 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,445 - root - ERROR - Device not found : 00017
+2020-08-23 10:44:45,445 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,446 - root - ERROR - Device not found : 00018
+2020-08-23 10:44:45,446 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,448 - root - ERROR - Device not found : 00019
+2020-08-23 10:44:45,448 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,449 - root - ERROR - Device not found : 0001A
+2020-08-23 10:44:45,449 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,450 - root - ERROR - Device not found : 0001B
+2020-08-23 10:44:45,450 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,452 - root - ERROR - Device not found : 0001C
+2020-08-23 10:44:45,452 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,453 - root - ERROR - Device not found : 0001D
+2020-08-23 10:44:45,453 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,454 - root - ERROR - Device not found : 0001E
+2020-08-23 10:44:45,454 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,455 - root - ERROR - Device not found : 0001F
+2020-08-23 10:44:45,456 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,457 - root - ERROR - Device not found : 00020
+2020-08-23 10:44:45,457 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,458 - root - ERROR - Device not found : 00021
+2020-08-23 10:44:45,458 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,459 - root - ERROR - Device not found : 00022
+2020-08-23 10:44:45,459 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:45,461 - root - ERROR - Device not found : 00023
+2020-08-23 10:44:45,461 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:44:46,929 - root - INFO - RunALL : symsg list -v -sid 000297700084 -out xml
+2020-08-23 10:44:46,929 - root - INFO - FilterAll : SG
+2020-08-23 10:44:51,336 - root - INFO - Run : symcfg -sid 000297700084  list -memory -out xml
+2020-08-23 10:44:51,336 - root - INFO - Filter : Symmetrix/Symm_Info
+2020-08-23 10:44:52,153 - root - INFO - RunALL : symcfg -sid 000297700084  list -fa all -v -out xml
+2020-08-23 10:44:52,153 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 10:44:53,163 - root - INFO - RunALL : symcfg -sid 000297700084  list -ra all -v -out xml
+2020-08-23 10:44:53,163 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 10:45:08,647 - root - INFO - Run : symcfg -sid 000297700086 -srp -efficiency list -output xml
+2020-08-23 10:45:08,647 - root - INFO - Filter : Symmetrix/SRP/SRP_Info
+2020-08-23 10:45:09,637 - root - INFO - Run : symcfg -sid 000297700086 list  -demand -v -tb -out xml
+2020-08-23 10:45:09,638 - root - INFO - Filter : Symmetrix
+2020-08-23 10:45:10,800 - root - INFO - RunALL : symdisk list -sid 000297700086 -out xml
+2020-08-23 10:45:10,801 - root - INFO - FilterAll : Symmetrix/Disk
+2020-08-23 10:45:11,882 - root - INFO - RunALL : symdev list -sid 000297700086  -v -out xml 
+2020-08-23 10:45:11,882 - root - INFO - FilterAll : Symmetrix/Device
+2020-08-23 10:45:26,065 - root - INFO - NB elt : 4060
+2020-08-23 10:45:26,065 - root - INFO - RunALL : symcfg -sid 000297700086 list -tdev -out xml
+2020-08-23 10:45:26,065 - root - INFO - FilterAll : Symmetrix/ThinDevs/Device
+2020-08-23 10:45:28,330 - root - INFO - NB elt : 4094
+2020-08-23 10:45:28,334 - root - ERROR - Device not found : 00002
+2020-08-23 10:45:28,334 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,337 - root - ERROR - Device not found : 00003
+2020-08-23 10:45:28,337 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,341 - root - ERROR - Device not found : 00004
+2020-08-23 10:45:28,341 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,344 - root - ERROR - Device not found : 00005
+2020-08-23 10:45:28,344 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,347 - root - ERROR - Device not found : 00006
+2020-08-23 10:45:28,347 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,350 - root - ERROR - Device not found : 00007
+2020-08-23 10:45:28,350 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,353 - root - ERROR - Device not found : 00008
+2020-08-23 10:45:28,353 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,355 - root - ERROR - Device not found : 00009
+2020-08-23 10:45:28,356 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,358 - root - ERROR - Device not found : 0000A
+2020-08-23 10:45:28,358 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,361 - root - ERROR - Device not found : 0000B
+2020-08-23 10:45:28,361 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,364 - root - ERROR - Device not found : 0000C
+2020-08-23 10:45:28,364 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,367 - root - ERROR - Device not found : 0000D
+2020-08-23 10:45:28,367 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,370 - root - ERROR - Device not found : 0000E
+2020-08-23 10:45:28,370 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,373 - root - ERROR - Device not found : 0000F
+2020-08-23 10:45:28,373 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,376 - root - ERROR - Device not found : 00010
+2020-08-23 10:45:28,376 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,379 - root - ERROR - Device not found : 00011
+2020-08-23 10:45:28,379 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,382 - root - ERROR - Device not found : 00012
+2020-08-23 10:45:28,382 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,385 - root - ERROR - Device not found : 00013
+2020-08-23 10:45:28,385 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,388 - root - ERROR - Device not found : 00014
+2020-08-23 10:45:28,388 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,390 - root - ERROR - Device not found : 00015
+2020-08-23 10:45:28,391 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,393 - root - ERROR - Device not found : 00016
+2020-08-23 10:45:28,393 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,396 - root - ERROR - Device not found : 00017
+2020-08-23 10:45:28,396 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,399 - root - ERROR - Device not found : 00018
+2020-08-23 10:45:28,400 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,403 - root - ERROR - Device not found : 00019
+2020-08-23 10:45:28,403 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,406 - root - ERROR - Device not found : 0001A
+2020-08-23 10:45:28,406 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,408 - root - ERROR - Device not found : 0001B
+2020-08-23 10:45:28,408 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,410 - root - ERROR - Device not found : 0001C
+2020-08-23 10:45:28,410 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,413 - root - ERROR - Device not found : 0001D
+2020-08-23 10:45:28,413 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,415 - root - ERROR - Device not found : 0001E
+2020-08-23 10:45:28,415 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,417 - root - ERROR - Device not found : 0001F
+2020-08-23 10:45:28,417 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,419 - root - ERROR - Device not found : 00020
+2020-08-23 10:45:28,419 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,422 - root - ERROR - Device not found : 00021
+2020-08-23 10:45:28,422 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,424 - root - ERROR - Device not found : 00022
+2020-08-23 10:45:28,424 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:28,426 - root - ERROR - Device not found : 00023
+2020-08-23 10:45:28,426 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:45:32,427 - root - INFO - RunALL : symsg list -v -sid 000297700086 -out xml
+2020-08-23 10:45:32,427 - root - INFO - FilterAll : SG
+2020-08-23 10:45:40,159 - root - INFO - Run : symcfg -sid 000297700086  list -memory -out xml
+2020-08-23 10:45:40,160 - root - INFO - Filter : Symmetrix/Symm_Info
+2020-08-23 10:45:41,089 - root - INFO - RunALL : symcfg -sid 000297700086  list -fa all -v -out xml
+2020-08-23 10:45:41,089 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 10:45:41,996 - root - INFO - RunALL : symcfg -sid 000297700086  list -ra all -v -out xml
+2020-08-23 10:45:41,996 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 10:45:57,904 - root - INFO - Run : symcfg -sid 000297700089 -srp -efficiency list -output xml
+2020-08-23 10:45:57,904 - root - INFO - Filter : Symmetrix/SRP/SRP_Info
+2020-08-23 10:45:58,844 - root - INFO - Run : symcfg -sid 000297700089 list  -demand -v -tb -out xml
+2020-08-23 10:45:58,845 - root - INFO - Filter : Symmetrix
+2020-08-23 10:45:59,906 - root - INFO - RunALL : symdisk list -sid 000297700089 -out xml
+2020-08-23 10:45:59,906 - root - INFO - FilterAll : Symmetrix/Disk
+2020-08-23 10:46:01,004 - root - INFO - RunALL : symdev list -sid 000297700089  -v -out xml 
+2020-08-23 10:46:01,004 - root - INFO - FilterAll : Symmetrix/Device
+2020-08-23 10:46:08,447 - root - INFO - NB elt : 1756
+2020-08-23 10:46:08,447 - root - INFO - RunALL : symcfg -sid 000297700089 list -tdev -out xml
+2020-08-23 10:46:08,447 - root - INFO - FilterAll : Symmetrix/ThinDevs/Device
+2020-08-23 10:46:09,994 - root - INFO - NB elt : 1790
+2020-08-23 10:46:09,996 - root - ERROR - Device not found : 00002
+2020-08-23 10:46:09,996 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:09,998 - root - ERROR - Device not found : 00003
+2020-08-23 10:46:09,998 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:09,999 - root - ERROR - Device not found : 00004
+2020-08-23 10:46:09,999 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,000 - root - ERROR - Device not found : 00005
+2020-08-23 10:46:10,000 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,001 - root - ERROR - Device not found : 00006
+2020-08-23 10:46:10,001 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,002 - root - ERROR - Device not found : 00007
+2020-08-23 10:46:10,002 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,003 - root - ERROR - Device not found : 00008
+2020-08-23 10:46:10,004 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,005 - root - ERROR - Device not found : 00009
+2020-08-23 10:46:10,005 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,006 - root - ERROR - Device not found : 0000A
+2020-08-23 10:46:10,006 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,007 - root - ERROR - Device not found : 0000B
+2020-08-23 10:46:10,007 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,008 - root - ERROR - Device not found : 0000C
+2020-08-23 10:46:10,008 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,009 - root - ERROR - Device not found : 0000D
+2020-08-23 10:46:10,009 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,010 - root - ERROR - Device not found : 0000E
+2020-08-23 10:46:10,010 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,011 - root - ERROR - Device not found : 0000F
+2020-08-23 10:46:10,012 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,013 - root - ERROR - Device not found : 00010
+2020-08-23 10:46:10,013 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,014 - root - ERROR - Device not found : 00011
+2020-08-23 10:46:10,014 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,015 - root - ERROR - Device not found : 00012
+2020-08-23 10:46:10,015 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,016 - root - ERROR - Device not found : 00013
+2020-08-23 10:46:10,016 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,017 - root - ERROR - Device not found : 00014
+2020-08-23 10:46:10,017 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,018 - root - ERROR - Device not found : 00015
+2020-08-23 10:46:10,018 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,020 - root - ERROR - Device not found : 00016
+2020-08-23 10:46:10,020 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,021 - root - ERROR - Device not found : 00017
+2020-08-23 10:46:10,021 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,022 - root - ERROR - Device not found : 00018
+2020-08-23 10:46:10,022 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,023 - root - ERROR - Device not found : 00019
+2020-08-23 10:46:10,023 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,024 - root - ERROR - Device not found : 0001A
+2020-08-23 10:46:10,024 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,025 - root - ERROR - Device not found : 0001B
+2020-08-23 10:46:10,025 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,026 - root - ERROR - Device not found : 0001C
+2020-08-23 10:46:10,026 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,027 - root - ERROR - Device not found : 0001D
+2020-08-23 10:46:10,028 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,029 - root - ERROR - Device not found : 0001E
+2020-08-23 10:46:10,029 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,030 - root - ERROR - Device not found : 0001F
+2020-08-23 10:46:10,030 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,031 - root - ERROR - Device not found : 00020
+2020-08-23 10:46:10,031 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,032 - root - ERROR - Device not found : 00021
+2020-08-23 10:46:10,032 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,033 - root - ERROR - Device not found : 00022
+2020-08-23 10:46:10,033 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,034 - root - ERROR - Device not found : 00023
+2020-08-23 10:46:10,034 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:46:10,927 - root - INFO - RunALL : symsg list -v -sid 000297700089 -out xml
+2020-08-23 10:46:10,927 - root - INFO - FilterAll : SG
+2020-08-23 10:46:13,712 - root - INFO - Run : symcfg -sid 000297700089  list -memory -out xml
+2020-08-23 10:46:13,713 - root - INFO - Filter : Symmetrix/Symm_Info
+2020-08-23 10:46:14,554 - root - INFO - RunALL : symcfg -sid 000297700089  list -fa all -v -out xml
+2020-08-23 10:46:14,554 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 10:46:15,545 - root - INFO - RunALL : symcfg -sid 000297700089  list -ra all -v -out xml
+2020-08-23 10:46:15,545 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 10:46:31,909 - root - INFO - End
+2020-08-23 10:58:15,852 - root - INFO - Start
+2020-08-23 10:58:15,852 - root - INFO - RunALL : symcfg list -v -output xml
+2020-08-23 10:58:15,852 - root - INFO - FilterAll : Symmetrix
+2020-08-23 10:58:16,801 - root - INFO - Run : symcfg -sid 000297700196 -srp -efficiency list -output xml
+2020-08-23 10:58:16,801 - root - INFO - Filter : Symmetrix/SRP/SRP_Info
+2020-08-23 10:58:17,512 - root - INFO - Run : symcfg -sid 000297700196 list  -demand -v -tb -out xml
+2020-08-23 10:58:17,512 - root - INFO - Filter : Symmetrix
+2020-08-23 10:58:18,265 - root - INFO - RunALL : symdisk list -sid 000297700196 -out xml
+2020-08-23 10:58:18,265 - root - INFO - FilterAll : Symmetrix/Disk
+2020-08-23 10:58:19,078 - root - INFO - RunALL : symdev list -sid 000297700196  -v -out xml 
+2020-08-23 10:58:19,078 - root - INFO - FilterAll : Symmetrix/Device
+2020-08-23 10:58:23,697 - root - INFO - NB elt : 771
+2020-08-23 10:58:23,697 - root - INFO - RunALL : symcfg -sid 000297700196 list -tdev -out xml
+2020-08-23 10:58:23,697 - root - INFO - FilterAll : Symmetrix/ThinDevs/Device
+2020-08-23 10:58:25,446 - root - INFO - NB elt : 808
+2020-08-23 10:58:25,447 - root - ERROR - Device not found : 00002
+2020-08-23 10:58:25,447 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,448 - root - ERROR - Device not found : 00003
+2020-08-23 10:58:25,448 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,449 - root - ERROR - Device not found : 00004
+2020-08-23 10:58:25,449 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,450 - root - ERROR - Device not found : 00005
+2020-08-23 10:58:25,450 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,451 - root - ERROR - Device not found : 00006
+2020-08-23 10:58:25,451 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,452 - root - ERROR - Device not found : 00007
+2020-08-23 10:58:25,452 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,453 - root - ERROR - Device not found : 00008
+2020-08-23 10:58:25,453 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,454 - root - ERROR - Device not found : 00009
+2020-08-23 10:58:25,454 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,455 - root - ERROR - Device not found : 0000A
+2020-08-23 10:58:25,455 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,456 - root - ERROR - Device not found : 0000B
+2020-08-23 10:58:25,456 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,456 - root - ERROR - Device not found : 0000C
+2020-08-23 10:58:25,456 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,457 - root - ERROR - Device not found : 0000D
+2020-08-23 10:58:25,457 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,458 - root - ERROR - Device not found : 0000E
+2020-08-23 10:58:25,458 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,459 - root - ERROR - Device not found : 0000F
+2020-08-23 10:58:25,459 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,459 - root - ERROR - Device not found : 00010
+2020-08-23 10:58:25,459 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,460 - root - ERROR - Device not found : 00011
+2020-08-23 10:58:25,460 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,461 - root - ERROR - Device not found : 00012
+2020-08-23 10:58:25,461 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,461 - root - ERROR - Device not found : 00013
+2020-08-23 10:58:25,461 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,462 - root - ERROR - Device not found : 00014
+2020-08-23 10:58:25,462 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,463 - root - ERROR - Device not found : 00015
+2020-08-23 10:58:25,463 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,463 - root - ERROR - Device not found : 00016
+2020-08-23 10:58:25,463 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,464 - root - ERROR - Device not found : 00017
+2020-08-23 10:58:25,464 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,465 - root - ERROR - Device not found : 00018
+2020-08-23 10:58:25,465 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,465 - root - ERROR - Device not found : 00019
+2020-08-23 10:58:25,466 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,466 - root - ERROR - Device not found : 0001A
+2020-08-23 10:58:25,466 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,467 - root - ERROR - Device not found : 0001B
+2020-08-23 10:58:25,467 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,468 - root - ERROR - Device not found : 0001C
+2020-08-23 10:58:25,468 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,468 - root - ERROR - Device not found : 0001D
+2020-08-23 10:58:25,468 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,469 - root - ERROR - Device not found : 0001E
+2020-08-23 10:58:25,469 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,470 - root - ERROR - Device not found : 0001F
+2020-08-23 10:58:25,470 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,470 - root - ERROR - Device not found : 00020
+2020-08-23 10:58:25,470 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,471 - root - ERROR - Device not found : 00021
+2020-08-23 10:58:25,471 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,472 - root - ERROR - Device not found : 00022
+2020-08-23 10:58:25,472 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,472 - root - ERROR - Device not found : 00023
+2020-08-23 10:58:25,473 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,473 - root - ERROR - Device not found : 00026
+2020-08-23 10:58:25,474 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,474 - root - ERROR - Device not found : 00027
+2020-08-23 10:58:25,474 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,475 - root - ERROR - Device not found : 00028
+2020-08-23 10:58:25,475 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:25,678 - root - INFO - RunALL : symsg list -v -sid 000297700196 -out xml
+2020-08-23 10:58:25,678 - root - INFO - FilterAll : SG
+2020-08-23 10:58:27,154 - root - INFO - Run : symcfg -sid 000297700196  list -memory -out xml
+2020-08-23 10:58:27,155 - root - INFO - Filter : Symmetrix/Symm_Info
+2020-08-23 10:58:28,015 - root - INFO - RunALL : symcfg -sid 000297700196  list -fa all -v -out xml
+2020-08-23 10:58:28,016 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 10:58:28,925 - root - INFO - RunALL : symcfg -sid 000297700196  list -ra all -v -out xml
+2020-08-23 10:58:28,925 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 10:58:43,759 - root - INFO - Run : symcfg -sid 000297700206 -srp -efficiency list -output xml
+2020-08-23 10:58:43,759 - root - INFO - Filter : Symmetrix/SRP/SRP_Info
+2020-08-23 10:58:44,905 - root - INFO - Run : symcfg -sid 000297700206 list  -demand -v -tb -out xml
+2020-08-23 10:58:44,905 - root - INFO - Filter : Symmetrix
+2020-08-23 10:58:45,923 - root - INFO - RunALL : symdisk list -sid 000297700206 -out xml
+2020-08-23 10:58:45,923 - root - INFO - FilterAll : Symmetrix/Disk
+2020-08-23 10:58:46,952 - root - INFO - RunALL : symdev list -sid 000297700206  -v -out xml 
+2020-08-23 10:58:46,952 - root - INFO - FilterAll : Symmetrix/Device
+2020-08-23 10:58:50,634 - root - INFO - NB elt : 861
+2020-08-23 10:58:50,635 - root - INFO - RunALL : symcfg -sid 000297700206 list -tdev -out xml
+2020-08-23 10:58:50,635 - root - INFO - FilterAll : Symmetrix/ThinDevs/Device
+2020-08-23 10:58:51,765 - root - INFO - NB elt : 898
+2020-08-23 10:58:51,766 - root - ERROR - Device not found : 00002
+2020-08-23 10:58:51,766 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,767 - root - ERROR - Device not found : 00003
+2020-08-23 10:58:51,767 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,767 - root - ERROR - Device not found : 00004
+2020-08-23 10:58:51,767 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,768 - root - ERROR - Device not found : 00005
+2020-08-23 10:58:51,768 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,768 - root - ERROR - Device not found : 00006
+2020-08-23 10:58:51,769 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,769 - root - ERROR - Device not found : 00007
+2020-08-23 10:58:51,769 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,770 - root - ERROR - Device not found : 00008
+2020-08-23 10:58:51,770 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,770 - root - ERROR - Device not found : 00009
+2020-08-23 10:58:51,770 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,771 - root - ERROR - Device not found : 0000A
+2020-08-23 10:58:51,771 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,771 - root - ERROR - Device not found : 0000B
+2020-08-23 10:58:51,771 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,772 - root - ERROR - Device not found : 0000C
+2020-08-23 10:58:51,772 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,773 - root - ERROR - Device not found : 0000D
+2020-08-23 10:58:51,773 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,773 - root - ERROR - Device not found : 0000E
+2020-08-23 10:58:51,773 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,774 - root - ERROR - Device not found : 0000F
+2020-08-23 10:58:51,774 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,774 - root - ERROR - Device not found : 00010
+2020-08-23 10:58:51,774 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,775 - root - ERROR - Device not found : 00011
+2020-08-23 10:58:51,775 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,775 - root - ERROR - Device not found : 00012
+2020-08-23 10:58:51,776 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,776 - root - ERROR - Device not found : 00013
+2020-08-23 10:58:51,776 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,777 - root - ERROR - Device not found : 00014
+2020-08-23 10:58:51,777 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,777 - root - ERROR - Device not found : 00015
+2020-08-23 10:58:51,777 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,778 - root - ERROR - Device not found : 00016
+2020-08-23 10:58:51,778 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,778 - root - ERROR - Device not found : 00017
+2020-08-23 10:58:51,778 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,779 - root - ERROR - Device not found : 00018
+2020-08-23 10:58:51,779 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,780 - root - ERROR - Device not found : 00019
+2020-08-23 10:58:51,780 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,780 - root - ERROR - Device not found : 0001A
+2020-08-23 10:58:51,780 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,781 - root - ERROR - Device not found : 0001B
+2020-08-23 10:58:51,781 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,781 - root - ERROR - Device not found : 0001C
+2020-08-23 10:58:51,781 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,782 - root - ERROR - Device not found : 0001D
+2020-08-23 10:58:51,782 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,782 - root - ERROR - Device not found : 0001E
+2020-08-23 10:58:51,783 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,783 - root - ERROR - Device not found : 0001F
+2020-08-23 10:58:51,783 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,784 - root - ERROR - Device not found : 00020
+2020-08-23 10:58:51,784 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,784 - root - ERROR - Device not found : 00021
+2020-08-23 10:58:51,784 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,785 - root - ERROR - Device not found : 00022
+2020-08-23 10:58:51,785 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,785 - root - ERROR - Device not found : 00023
+2020-08-23 10:58:51,785 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,786 - root - ERROR - Device not found : 00026
+2020-08-23 10:58:51,786 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,786 - root - ERROR - Device not found : 00027
+2020-08-23 10:58:51,787 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:51,787 - root - ERROR - Device not found : 00028
+2020-08-23 10:58:51,787 - root - DEBUG - Skip -- Device has no details
+2020-08-23 10:58:52,014 - root - INFO - RunALL : symsg list -v -sid 000297700206 -out xml
+2020-08-23 10:58:52,014 - root - INFO - FilterAll : SG
+2020-08-23 10:58:53,305 - root - INFO - Run : symcfg -sid 000297700206  list -memory -out xml
+2020-08-23 10:58:53,305 - root - INFO - Filter : Symmetrix/Symm_Info
+2020-08-23 10:58:54,192 - root - INFO - RunALL : symcfg -sid 000297700206  list -fa all -v -out xml
+2020-08-23 10:58:54,192 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 10:58:55,145 - root - INFO - RunALL : symcfg -sid 000297700206  list -ra all -v -out xml
+2020-08-23 10:58:55,145 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 10:59:09,571 - root - INFO - End
+2020-08-23 12:06:51,106 - root - INFO - Start
+2020-08-23 12:06:51,106 - root - INFO - RunALL : symcfg list -v -output xml
+2020-08-23 12:06:51,106 - root - INFO - FilterAll : Symmetrix
+2020-08-23 12:06:51,917 - root - INFO - Run : symcfg -sid 000297800781 -srp -efficiency list -output xml
+2020-08-23 12:06:51,918 - root - INFO - Filter : Symmetrix/SRP/SRP_Info
+2020-08-23 12:06:52,836 - root - INFO - Run : symcfg -sid 000297800781 list  -demand -v -tb -out xml
+2020-08-23 12:06:52,836 - root - INFO - Filter : Symmetrix
+2020-08-23 12:06:53,652 - root - INFO - RunALL : symdisk list -sid 000297800781 -out xml
+2020-08-23 12:06:53,653 - root - INFO - FilterAll : Symmetrix/Disk
+2020-08-23 12:06:54,582 - root - INFO - RunALL : symdev list -sid 000297800781  -v -out xml 
+2020-08-23 12:06:54,582 - root - INFO - FilterAll : Symmetrix/Device
+2020-08-23 12:07:08,621 - root - INFO - NB elt : 5689
+2020-08-23 12:07:08,621 - root - INFO - RunALL : symcfg -sid 000297800781 list -tdev -out xml
+2020-08-23 12:07:08,621 - root - INFO - FilterAll : Symmetrix/ThinDevs/Device
+2020-08-23 12:07:11,725 - root - INFO - NB elt : 5723
+2020-08-23 12:07:11,729 - root - ERROR - Device not found : 00002
+2020-08-23 12:07:11,729 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,733 - root - ERROR - Device not found : 00003
+2020-08-23 12:07:11,733 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,736 - root - ERROR - Device not found : 00004
+2020-08-23 12:07:11,736 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,739 - root - ERROR - Device not found : 00005
+2020-08-23 12:07:11,739 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,742 - root - ERROR - Device not found : 00006
+2020-08-23 12:07:11,742 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,744 - root - ERROR - Device not found : 00007
+2020-08-23 12:07:11,744 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,747 - root - ERROR - Device not found : 00008
+2020-08-23 12:07:11,748 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,751 - root - ERROR - Device not found : 00009
+2020-08-23 12:07:11,751 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,754 - root - ERROR - Device not found : 0000A
+2020-08-23 12:07:11,755 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,758 - root - ERROR - Device not found : 0000B
+2020-08-23 12:07:11,758 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,762 - root - ERROR - Device not found : 0000C
+2020-08-23 12:07:11,762 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,765 - root - ERROR - Device not found : 0000D
+2020-08-23 12:07:11,766 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,769 - root - ERROR - Device not found : 0000E
+2020-08-23 12:07:11,769 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,773 - root - ERROR - Device not found : 0000F
+2020-08-23 12:07:11,773 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,777 - root - ERROR - Device not found : 00010
+2020-08-23 12:07:11,777 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,781 - root - ERROR - Device not found : 00011
+2020-08-23 12:07:11,781 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,786 - root - ERROR - Device not found : 00012
+2020-08-23 12:07:11,786 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,791 - root - ERROR - Device not found : 00013
+2020-08-23 12:07:11,792 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,797 - root - ERROR - Device not found : 00014
+2020-08-23 12:07:11,797 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,802 - root - ERROR - Device not found : 00015
+2020-08-23 12:07:11,802 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,807 - root - ERROR - Device not found : 00016
+2020-08-23 12:07:11,807 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,812 - root - ERROR - Device not found : 00017
+2020-08-23 12:07:11,812 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,815 - root - ERROR - Device not found : 00018
+2020-08-23 12:07:11,815 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,819 - root - ERROR - Device not found : 00019
+2020-08-23 12:07:11,819 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,822 - root - ERROR - Device not found : 0001A
+2020-08-23 12:07:11,823 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,826 - root - ERROR - Device not found : 0001B
+2020-08-23 12:07:11,826 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,830 - root - ERROR - Device not found : 0001C
+2020-08-23 12:07:11,830 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,833 - root - ERROR - Device not found : 0001D
+2020-08-23 12:07:11,833 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,837 - root - ERROR - Device not found : 0001E
+2020-08-23 12:07:11,837 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,840 - root - ERROR - Device not found : 0001F
+2020-08-23 12:07:11,840 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,843 - root - ERROR - Device not found : 00020
+2020-08-23 12:07:11,843 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,845 - root - ERROR - Device not found : 00021
+2020-08-23 12:07:11,845 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,848 - root - ERROR - Device not found : 00022
+2020-08-23 12:07:11,848 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:11,850 - root - ERROR - Device not found : 00023
+2020-08-23 12:07:11,851 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:07:19,640 - root - INFO - RunALL : symsg list -v -sid 000297800781 -out xml
+2020-08-23 12:07:19,640 - root - INFO - FilterAll : SG
+2020-08-23 12:07:23,143 - root - INFO - Run : symcfg -sid 000297800781  list -memory -out xml
+2020-08-23 12:07:23,143 - root - INFO - Filter : Symmetrix/Symm_Info
+2020-08-23 12:07:23,982 - root - INFO - RunALL : symcfg -sid 000297800781  list -fa all -v -out xml
+2020-08-23 12:07:23,982 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 12:07:24,799 - root - INFO - RunALL : symcfg -sid 000297800781  list -ra all -v -out xml
+2020-08-23 12:07:24,799 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 12:07:40,348 - root - INFO - Run : symcfg -sid 000297800814 -srp -efficiency list -output xml
+2020-08-23 12:07:40,348 - root - INFO - Filter : Symmetrix/SRP/SRP_Info
+2020-08-23 12:07:41,482 - root - INFO - Run : symcfg -sid 000297800814 list  -demand -v -tb -out xml
+2020-08-23 12:07:41,483 - root - INFO - Filter : Symmetrix
+2020-08-23 12:07:42,310 - root - INFO - RunALL : symdisk list -sid 000297800814 -out xml
+2020-08-23 12:07:42,311 - root - INFO - FilterAll : Symmetrix/Disk
+2020-08-23 12:07:43,401 - root - INFO - RunALL : symdev list -sid 000297800814  -v -out xml 
+2020-08-23 12:07:43,401 - root - INFO - FilterAll : Symmetrix/Device
+2020-08-23 12:07:58,418 - root - INFO - NB elt : 5689
+2020-08-23 12:07:58,418 - root - INFO - RunALL : symcfg -sid 000297800814 list -tdev -out xml
+2020-08-23 12:07:58,418 - root - INFO - FilterAll : Symmetrix/ThinDevs/Device
+2020-08-23 12:08:01,221 - root - INFO - NB elt : 5723
+2020-08-23 12:08:01,226 - root - ERROR - Device not found : 00002
+2020-08-23 12:08:01,227 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,231 - root - ERROR - Device not found : 00003
+2020-08-23 12:08:01,231 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,236 - root - ERROR - Device not found : 00004
+2020-08-23 12:08:01,236 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,240 - root - ERROR - Device not found : 00005
+2020-08-23 12:08:01,240 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,245 - root - ERROR - Device not found : 00006
+2020-08-23 12:08:01,245 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,249 - root - ERROR - Device not found : 00007
+2020-08-23 12:08:01,249 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,254 - root - ERROR - Device not found : 00008
+2020-08-23 12:08:01,254 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,259 - root - ERROR - Device not found : 00009
+2020-08-23 12:08:01,259 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,264 - root - ERROR - Device not found : 0000A
+2020-08-23 12:08:01,264 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,268 - root - ERROR - Device not found : 0000B
+2020-08-23 12:08:01,268 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,273 - root - ERROR - Device not found : 0000C
+2020-08-23 12:08:01,273 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,278 - root - ERROR - Device not found : 0000D
+2020-08-23 12:08:01,278 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,282 - root - ERROR - Device not found : 0000E
+2020-08-23 12:08:01,282 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,287 - root - ERROR - Device not found : 0000F
+2020-08-23 12:08:01,287 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,292 - root - ERROR - Device not found : 00010
+2020-08-23 12:08:01,292 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,296 - root - ERROR - Device not found : 00011
+2020-08-23 12:08:01,297 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,301 - root - ERROR - Device not found : 00012
+2020-08-23 12:08:01,301 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,306 - root - ERROR - Device not found : 00013
+2020-08-23 12:08:01,306 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,310 - root - ERROR - Device not found : 00014
+2020-08-23 12:08:01,310 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,315 - root - ERROR - Device not found : 00015
+2020-08-23 12:08:01,315 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,319 - root - ERROR - Device not found : 00016
+2020-08-23 12:08:01,319 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,324 - root - ERROR - Device not found : 00017
+2020-08-23 12:08:01,324 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,329 - root - ERROR - Device not found : 00018
+2020-08-23 12:08:01,329 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,333 - root - ERROR - Device not found : 00019
+2020-08-23 12:08:01,333 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,338 - root - ERROR - Device not found : 0001A
+2020-08-23 12:08:01,338 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,342 - root - ERROR - Device not found : 0001B
+2020-08-23 12:08:01,342 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,347 - root - ERROR - Device not found : 0001C
+2020-08-23 12:08:01,347 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,351 - root - ERROR - Device not found : 0001D
+2020-08-23 12:08:01,351 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,355 - root - ERROR - Device not found : 0001E
+2020-08-23 12:08:01,355 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,360 - root - ERROR - Device not found : 0001F
+2020-08-23 12:08:01,360 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,364 - root - ERROR - Device not found : 00020
+2020-08-23 12:08:01,364 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,368 - root - ERROR - Device not found : 00021
+2020-08-23 12:08:01,368 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,372 - root - ERROR - Device not found : 00022
+2020-08-23 12:08:01,373 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:01,377 - root - ERROR - Device not found : 00023
+2020-08-23 12:08:01,377 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:08:09,659 - root - INFO - RunALL : symsg list -v -sid 000297800814 -out xml
+2020-08-23 12:08:09,659 - root - INFO - FilterAll : SG
+2020-08-23 12:08:12,633 - root - INFO - Run : symcfg -sid 000297800814  list -memory -out xml
+2020-08-23 12:08:12,633 - root - INFO - Filter : Symmetrix/Symm_Info
+2020-08-23 12:08:13,508 - root - INFO - RunALL : symcfg -sid 000297800814  list -fa all -v -out xml
+2020-08-23 12:08:13,508 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 12:08:14,393 - root - INFO - RunALL : symcfg -sid 000297800814  list -ra all -v -out xml
+2020-08-23 12:08:14,393 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 12:08:30,224 - root - INFO - End
+2020-08-23 12:12:58,630 - root - INFO - Start
+2020-08-23 12:12:58,630 - root - INFO - RunALL : symcfg list -v -output xml
+2020-08-23 12:12:58,630 - root - INFO - FilterAll : Symmetrix
+2020-08-23 12:12:59,682 - root - INFO - Run : symcfg -sid 000297800781 -srp -efficiency list -output xml
+2020-08-23 12:12:59,682 - root - INFO - Filter : Symmetrix/SRP/SRP_Info
+2020-08-23 12:13:00,552 - root - INFO - Run : symcfg -sid 000297800781 list  -demand -v -tb -out xml
+2020-08-23 12:13:00,552 - root - INFO - Filter : Symmetrix
+2020-08-23 12:13:01,461 - root - INFO - RunALL : symdisk list -sid 000297800781 -out xml
+2020-08-23 12:13:01,461 - root - INFO - FilterAll : Symmetrix/Disk
+2020-08-23 12:13:02,467 - root - INFO - RunALL : symdev list -sid 000297800781  -v -out xml 
+2020-08-23 12:13:02,467 - root - INFO - FilterAll : Symmetrix/Device
+2020-08-23 12:13:18,973 - root - INFO - NB elt : 5689
+2020-08-23 12:13:18,973 - root - INFO - RunALL : symcfg -sid 000297800781 list -tdev -out xml
+2020-08-23 12:13:18,973 - root - INFO - FilterAll : Symmetrix/ThinDevs/Device
+2020-08-23 12:13:22,073 - root - INFO - NB elt : 5723
+2020-08-23 12:13:22,077 - root - ERROR - Device not found : 00002
+2020-08-23 12:13:22,078 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,081 - root - ERROR - Device not found : 00003
+2020-08-23 12:13:22,081 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,085 - root - ERROR - Device not found : 00004
+2020-08-23 12:13:22,085 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,089 - root - ERROR - Device not found : 00005
+2020-08-23 12:13:22,089 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,092 - root - ERROR - Device not found : 00006
+2020-08-23 12:13:22,092 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,095 - root - ERROR - Device not found : 00007
+2020-08-23 12:13:22,095 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,098 - root - ERROR - Device not found : 00008
+2020-08-23 12:13:22,098 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,101 - root - ERROR - Device not found : 00009
+2020-08-23 12:13:22,101 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,104 - root - ERROR - Device not found : 0000A
+2020-08-23 12:13:22,104 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,107 - root - ERROR - Device not found : 0000B
+2020-08-23 12:13:22,107 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,109 - root - ERROR - Device not found : 0000C
+2020-08-23 12:13:22,110 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,112 - root - ERROR - Device not found : 0000D
+2020-08-23 12:13:22,112 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,115 - root - ERROR - Device not found : 0000E
+2020-08-23 12:13:22,115 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,117 - root - ERROR - Device not found : 0000F
+2020-08-23 12:13:22,117 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,119 - root - ERROR - Device not found : 00010
+2020-08-23 12:13:22,120 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,122 - root - ERROR - Device not found : 00011
+2020-08-23 12:13:22,122 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,124 - root - ERROR - Device not found : 00012
+2020-08-23 12:13:22,124 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,127 - root - ERROR - Device not found : 00013
+2020-08-23 12:13:22,127 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,129 - root - ERROR - Device not found : 00014
+2020-08-23 12:13:22,129 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,132 - root - ERROR - Device not found : 00015
+2020-08-23 12:13:22,132 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,134 - root - ERROR - Device not found : 00016
+2020-08-23 12:13:22,134 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,137 - root - ERROR - Device not found : 00017
+2020-08-23 12:13:22,137 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,139 - root - ERROR - Device not found : 00018
+2020-08-23 12:13:22,140 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,142 - root - ERROR - Device not found : 00019
+2020-08-23 12:13:22,142 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,144 - root - ERROR - Device not found : 0001A
+2020-08-23 12:13:22,144 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,147 - root - ERROR - Device not found : 0001B
+2020-08-23 12:13:22,147 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,149 - root - ERROR - Device not found : 0001C
+2020-08-23 12:13:22,149 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,152 - root - ERROR - Device not found : 0001D
+2020-08-23 12:13:22,152 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,153 - root - ERROR - Device not found : 0001E
+2020-08-23 12:13:22,154 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,156 - root - ERROR - Device not found : 0001F
+2020-08-23 12:13:22,156 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,158 - root - ERROR - Device not found : 00020
+2020-08-23 12:13:22,159 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,161 - root - ERROR - Device not found : 00021
+2020-08-23 12:13:22,161 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,163 - root - ERROR - Device not found : 00022
+2020-08-23 12:13:22,164 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:22,166 - root - ERROR - Device not found : 00023
+2020-08-23 12:13:22,166 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:13:30,405 - root - INFO - RunALL : symsg list -v -sid 000297800781 -out xml
+2020-08-23 12:13:30,405 - root - INFO - FilterAll : SG
+2020-08-23 12:13:33,748 - root - INFO - Run : symcfg -sid 000297800781  list -memory -out xml
+2020-08-23 12:13:33,748 - root - INFO - Filter : Symmetrix/Symm_Info
+2020-08-23 12:13:34,735 - root - INFO - RunALL : symcfg -sid 000297800781  list -fa all -v -out xml
+2020-08-23 12:13:34,735 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 12:13:35,636 - root - INFO - RunALL : symcfg -sid 000297800781  list -ra all -v -out xml
+2020-08-23 12:13:35,636 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 12:13:50,873 - root - INFO - Run : symcfg -sid 000297800814 -srp -efficiency list -output xml
+2020-08-23 12:13:50,873 - root - INFO - Filter : Symmetrix/SRP/SRP_Info
+2020-08-23 12:13:51,931 - root - INFO - Run : symcfg -sid 000297800814 list  -demand -v -tb -out xml
+2020-08-23 12:13:51,931 - root - INFO - Filter : Symmetrix
+2020-08-23 12:13:52,877 - root - INFO - RunALL : symdisk list -sid 000297800814 -out xml
+2020-08-23 12:13:52,877 - root - INFO - FilterAll : Symmetrix/Disk
+2020-08-23 12:13:53,953 - root - INFO - RunALL : symdev list -sid 000297800814  -v -out xml 
+2020-08-23 12:13:53,953 - root - INFO - FilterAll : Symmetrix/Device
+2020-08-23 12:14:08,721 - root - INFO - NB elt : 5689
+2020-08-23 12:14:08,721 - root - INFO - RunALL : symcfg -sid 000297800814 list -tdev -out xml
+2020-08-23 12:14:08,721 - root - INFO - FilterAll : Symmetrix/ThinDevs/Device
+2020-08-23 12:14:11,501 - root - INFO - NB elt : 5723
+2020-08-23 12:14:11,506 - root - ERROR - Device not found : 00002
+2020-08-23 12:14:11,506 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,511 - root - ERROR - Device not found : 00003
+2020-08-23 12:14:11,511 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,516 - root - ERROR - Device not found : 00004
+2020-08-23 12:14:11,516 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,520 - root - ERROR - Device not found : 00005
+2020-08-23 12:14:11,521 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,525 - root - ERROR - Device not found : 00006
+2020-08-23 12:14:11,525 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,530 - root - ERROR - Device not found : 00007
+2020-08-23 12:14:11,530 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,534 - root - ERROR - Device not found : 00008
+2020-08-23 12:14:11,534 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,539 - root - ERROR - Device not found : 00009
+2020-08-23 12:14:11,539 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,544 - root - ERROR - Device not found : 0000A
+2020-08-23 12:14:11,544 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,548 - root - ERROR - Device not found : 0000B
+2020-08-23 12:14:11,549 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,553 - root - ERROR - Device not found : 0000C
+2020-08-23 12:14:11,553 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,558 - root - ERROR - Device not found : 0000D
+2020-08-23 12:14:11,558 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,562 - root - ERROR - Device not found : 0000E
+2020-08-23 12:14:11,562 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,567 - root - ERROR - Device not found : 0000F
+2020-08-23 12:14:11,567 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,572 - root - ERROR - Device not found : 00010
+2020-08-23 12:14:11,572 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,577 - root - ERROR - Device not found : 00011
+2020-08-23 12:14:11,578 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,582 - root - ERROR - Device not found : 00012
+2020-08-23 12:14:11,583 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,587 - root - ERROR - Device not found : 00013
+2020-08-23 12:14:11,587 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,592 - root - ERROR - Device not found : 00014
+2020-08-23 12:14:11,592 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,597 - root - ERROR - Device not found : 00015
+2020-08-23 12:14:11,597 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,601 - root - ERROR - Device not found : 00016
+2020-08-23 12:14:11,602 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,606 - root - ERROR - Device not found : 00017
+2020-08-23 12:14:11,606 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,611 - root - ERROR - Device not found : 00018
+2020-08-23 12:14:11,611 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,616 - root - ERROR - Device not found : 00019
+2020-08-23 12:14:11,616 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,621 - root - ERROR - Device not found : 0001A
+2020-08-23 12:14:11,621 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,626 - root - ERROR - Device not found : 0001B
+2020-08-23 12:14:11,626 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,631 - root - ERROR - Device not found : 0001C
+2020-08-23 12:14:11,631 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,636 - root - ERROR - Device not found : 0001D
+2020-08-23 12:14:11,636 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,640 - root - ERROR - Device not found : 0001E
+2020-08-23 12:14:11,641 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,645 - root - ERROR - Device not found : 0001F
+2020-08-23 12:14:11,645 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,651 - root - ERROR - Device not found : 00020
+2020-08-23 12:14:11,652 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,657 - root - ERROR - Device not found : 00021
+2020-08-23 12:14:11,657 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,663 - root - ERROR - Device not found : 00022
+2020-08-23 12:14:11,663 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:11,668 - root - ERROR - Device not found : 00023
+2020-08-23 12:14:11,668 - root - DEBUG - Skip -- Device has no details
+2020-08-23 12:14:21,078 - root - INFO - RunALL : symsg list -v -sid 000297800814 -out xml
+2020-08-23 12:14:21,078 - root - INFO - FilterAll : SG
+2020-08-23 12:14:23,988 - root - INFO - Run : symcfg -sid 000297800814  list -memory -out xml
+2020-08-23 12:14:23,988 - root - INFO - Filter : Symmetrix/Symm_Info
+2020-08-23 12:14:24,912 - root - INFO - RunALL : symcfg -sid 000297800814  list -fa all -v -out xml
+2020-08-23 12:14:24,912 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 12:14:25,732 - root - INFO - RunALL : symcfg -sid 000297800814  list -ra all -v -out xml
+2020-08-23 12:14:25,732 - root - INFO - FilterAll : Symmetrix/Director
+2020-08-23 12:14:42,062 - root - INFO - End
