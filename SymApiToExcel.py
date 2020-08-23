@@ -48,27 +48,29 @@ SymDiskList = 'symdisk list -sid %%sid%% -out xml'
 SymSGList = 'symsg list -v -sid %%sid%% -out xml'
 SymDevShow = 'symdev show -sid %%sid%%  %%device%% -out xml '
 SymDevList = 'symdev list -sid %%sid%%  -v -out xml '
-Supported_Platform = ['VMAX250F' , 'VMAX950F', 'VMAX450F', 'VMAX850F', 'PowerMax_8000', 'PowerMax_2000']
+SymCfgListMemory = 'symcfg -sid %%sid%%  list -memory -out xml'
+SymCfgListFa = 'symcfg -sid %%sid%%  list -fa all -v -out xml'
+Supported_Platform = ['VMAX250F', 'VMAX950F', 'VMAX450F', 'VMAX850F', 'PowerMax_8000', 'PowerMax_2000']
 
 
-"""
-meObjets : mother class for all custom objects.
-
-you will find static methoods for code refactoring (why do it 10 times when you can write once and call many (find / findall)
-
-You will also find toString methods that transform an object to string listing all attributes to string.
-if an attrivute is a list, then data are not printed.
-
-
-"""
 class mesObjets:
+    """
+    meObjets : mother class for all custom objects.
+
+    you will find static methoods for code refactoring (why do it 10 times when you can write once and call many (find / findall)
+
+    You will also find toString methods that transform an object to string listing all attributes to string.
+    if an attrivute is a list, then data are not printed.
+
+
+    """
 
     def toString(self):
         result = ""
         variables = self.__dict__.items()
         for variable, value in variables:
             if (str(variable).startswith("list_")):
-                result = result + variable + " ====> LIST \n"
+                result = result + variable + " ====> LIST " + str(len(list(value))) + " Elements \n"
             else:
                 result = result + variable + "  ====>  " + str(value) + "\n"
         return result
@@ -99,24 +101,70 @@ class mesObjets:
     @staticmethod
     def ifNAtoInt(Value):
         result = 0
-        if (Value=="N/A"):
-            result=-1
+        if (Value == "N/A"):
+            result = -1
         else:
-            result=int(Value)
+            result = int(Value)
 
         return result
 
-"""
-class for the physical spindles
+class frontEndPorts(mesObjets):
+    """
+    class for the FE ports (Frontend FC) FA Emulation
 
-Aim it to list all disks in the symmetrix, size, vendor and revision.
+    Aim it to list all available Frontend Ports
 
-No special methods except : 
-loadfromXML and loadfrom command (symdisk).
-loadfromXML do the mapping from XML to Object
+    No special methods except :
+    loadfromXML and loadfrom command (symdisk).
+    loadfromXML do the mapping from XML to Object
 
-"""
+    """
+    dir_name = ""
+    port = 0
+    port_wwn = ""
+    port_status = ""
+    negotiated_speed = 0
+    maximum_speed = 0
+
+    @staticmethod
+    def loadSymmetrixFromXML(feXML,director_name):
+        newFE = frontEndPorts()
+        newFE.dir_name = director_name
+        port_type=feXML.find("Port_Info")
+        newFE.port = int(port_type.find("port").text)
+        newFE.negotiated_speed = mesObjets.ifNAtoInt(port_type.find("negotiated_speed").text)
+        newFE.maximum_speed = mesObjets.ifNAtoInt(port_type.find("maximum_speed").text)
+        newFE.port_wwn = port_type.find("port_wwn").text
+        newFE.port_status = port_type.find("port_status").text
+
+        return newFE
+
+    @staticmethod
+    def loadFromCommand(sid) -> list:
+        toRun = SymCfgListFa.replace('%%sid%%', sid)
+        listFEPorts = []
+        for director in mesObjets.runFindall(toRun, 'Symmetrix/Director'):
+            dir_info = director.find("Dir_Info")
+            dir_name = dir_info.find("symbolic").text
+            for fe in director.findall("Port"):
+                listFEPorts.append(frontEndPorts.loadSymmetrixFromXML(fe,dir_name))
+        return listFEPorts
+
+
+
 class disk(mesObjets):
+    """
+    class for the physical spindles
+
+    Aim it to list all disks in the symmetrix, size, vendor and revision.
+
+    No special methods except :
+    loadfromXML and loadfrom command (symdisk).
+    loadfromXML do the mapping from XML to Object
+
+    """
+
+
     ident = ""
     da_number = ""
     disk_group = 0
@@ -152,18 +200,20 @@ class disk(mesObjets):
         return listDisks
 
 
-"""
-class for the storageGroup (list of devices altogether
-A storage groups holds the compression flag (to be or not compressed
 
-This object has to be intialized after Tdevs, becase StorageGroups owns Tdevices (list).
-
-No special methods except : 
-loadfromXML and loadfrom command (symsg).
-loadfromXML do the mapping from XML to Object
-
-"""
 class storageGroup(mesObjets):
+    """
+    class for the storageGroup (list of devices altogether
+    A storage groups holds the compression flag (to be or not compressed
+
+    This object has to be intialized after Tdevs, becase StorageGroups owns Tdevices (list).
+
+    No special methods except :
+    loadfromXML and loadfrom command (symsg).
+    loadfromXML do the mapping from XML to Object
+
+    """
+
     name = ""
     emulation = ""
     Masking_views = ""
@@ -197,33 +247,39 @@ class storageGroup(mesObjets):
         sg.HostIOLimit_max_mb_sec = sginfo.find("HostIOLimit_max_mb_sec").text
         sg.HostIOLimit_max_io_sec = sginfo.find("HostIOLimit_max_io_sec").text
 
-        dev_lists=sgsXML.find("DEVS_List")
+        dev_lists = sgsXML.find("DEVS_List")
         if dev_lists is None:
+            #
+            # Storage group has no volume
+            #
             sg.nbVolumes = 0
             sg.size_presented_in_gb = 0
             sg.size_allocated_in_gb = 0
-            sg.volumeList=""
+            sg.volumeList = ""
         else:
+            #
+            # Storage group has volumes
+            #
             sg.nbVolumes = 0
             sg.size_presented_in_gb = 0
             sg.size_allocated_in_gb = 0
-            sg.volumeList=""
+            sg.volumeList = ""
+            #
+            # Fetch all volumes from the device list
+            #
             for device in dev_lists.findall("Device"):
-                sg.nbVolumes=sg.nbVolumes+1
-                configuration=device.find("configuration").text
-                volID=device.find("dev_name").text
-                sg.volumeList=sg.volumeList+volID+","
+                sg.nbVolumes = sg.nbVolumes + 1
+                configuration = device.find("configuration").text
+                volID = device.find("dev_name").text
+                sg.volumeList = sg.volumeList + volID + ","
                 for Tdev in paramlist_devices:
-                    if (Tdev.dev_name==volID):
+                    if (Tdev.dev_name == volID):
                         sg.list_devices.append(Tdev)
-                        sg.size_presented_in_gb=sg.size_presented_in_gb+Tdev.total_tracks_gb
-                        sg.size_allocated_in_gb = sg.size_allocated_in_gb+Tdev.alloc_tracks_gb
-                        Tdev.configuration=configuration
-
-
+                        sg.size_presented_in_gb = sg.size_presented_in_gb + Tdev.total_tracks_gb
+                        sg.size_allocated_in_gb = sg.size_allocated_in_gb + Tdev.alloc_tracks_gb
+                        Tdev.configuration = configuration
 
         return sg
-
 
     @staticmethod
     def loadFromCommand(sid, paramlist_devices) -> list:
@@ -236,18 +292,24 @@ class storageGroup(mesObjets):
 
 
 
-#
-# Class Tdev
-#
 class tdev(mesObjets):
+    """
+        class for the Thin Devices (tdev)
+
+
+        No special methods except :
+        loadfromXML and loadfrom command (symdev and symcfg).
+        loadfromXML do the mapping from XML to Object
+
+        """
     dev_name = ""
     dev_emul = ""
     total_tracks_gb = 0
     alloc_tracks_gb = 0
     compression_ratio = ""
     tdev_status = ""
-    configuration=""
-    emulation=""
+    configuration = ""
+    emulation = ""
     encapsulated = ""
     encapsulated_wwn = ""
     encapsulated_array_id = ""
@@ -268,19 +330,18 @@ class tdev(mesObjets):
     remote_state = ""
     rdf_mode = ""
 
-
     @staticmethod
-    def findDetails(ID,listeDeviceDetails):
+    def findDetails(ID, listeDeviceDetails):
         for device in listeDeviceDetails:
             devinfo = device.find("Dev_Info")
             dev_name = devinfo.find("dev_name").text
-            if dev_name==ID:
+            if dev_name == ID:
                 return device
-        logger.error("Device not found : "+ID)
+        logger.error("Device not found : " + ID)
         return ""
 
     @staticmethod
-    def loadSymmetrixFromXML(device,listeDeviceDetails):
+    def loadSymmetrixFromXML(device, listeDeviceDetails):
         newTdev = tdev()
         newTdev.dev_name = device.find("dev_name").text
         newTdev.dev_emul = device.find("dev_emul").text
@@ -292,41 +353,41 @@ class tdev(mesObjets):
         #
         # Work on addition info
         #
-        details=tdev.findDetails(newTdev.dev_name,listeDeviceDetails)
+        details = tdev.findDetails(newTdev.dev_name, listeDeviceDetails)
 
         # Device not Found
         if details == "":
             logger.debug("Skip -- Device has no details")
             return newTdev
 
-        Dev_Info=details.find("Dev_Info")
+        Dev_Info = details.find("Dev_Info")
 
-        newTdev.encapsulated=Dev_Info.find("encapsulated").text
-        newTdev.encapsulated_wwn=Dev_Info.find("encapsulated_wwn").text
-        newTdev.encapsulated_array_id=Dev_Info.find("encapsulated_array_id").text
-        newTdev.encapsulated_device_name=Dev_Info.find("encapsulated_device_name").text
-        newTdev.status=Dev_Info.find("status").text
-        newTdev.snapvx_source=Dev_Info.find("snapvx_source").text
-        newTdev.snapvx_target=Dev_Info.find("snapvx_target").text
+        newTdev.encapsulated = Dev_Info.find("encapsulated").text
+        newTdev.encapsulated_wwn = Dev_Info.find("encapsulated_wwn").text
+        newTdev.encapsulated_array_id = Dev_Info.find("encapsulated_array_id").text
+        newTdev.encapsulated_device_name = Dev_Info.find("encapsulated_device_name").text
+        newTdev.status = Dev_Info.find("status").text
+        newTdev.snapvx_source = Dev_Info.find("snapvx_source").text
+        newTdev.snapvx_target = Dev_Info.find("snapvx_target").text
 
         Dev_Info = details.find("Device_External_Identity")
-        newTdev.wwn=Dev_Info.find("wwn").text
-        newTdev.ports=""
+        newTdev.wwn = Dev_Info.find("wwn").text
+        newTdev.ports = ""
         fe = Dev_Info.find("Front_End")
         if fe is not None:
             for port in fe.findall("Port"):
-                newTdev.ports=newTdev.ports+port.find("director").text+"-"+port.find("port").text+","
+                newTdev.ports = newTdev.ports + port.find("director").text + "-" + port.find("port").text + ","
 
         rdf = details.find("RDF")
         if rdf is not None:
-            rdf_info=rdf.find("RDF_Info")
+            rdf_info = rdf.find("RDF_Info")
             newTdev.pair_state = rdf_info.find("pair_state").text
             newTdev.suspend_state = rdf_info.find("suspend_state").text
             newTdev.consistency_state = rdf_info.find("consistency_state").text
             newTdev.paired_with_concurrent = rdf_info.find("paired_with_concurrent").text
             newTdev.paired_with_cascaded = rdf_info.find("paired_with_cascaded").text
 
-            rdf_mode=rdf.find("Mode")
+            rdf_mode = rdf.find("Mode")
             newTdev.rdf_mode = rdf_mode.find("mode").text
 
             remote = rdf.find("Remote")
@@ -335,7 +396,6 @@ class tdev(mesObjets):
             newTdev.remote_wwn = remote.find("wwn").text
             newTdev.remote_state = remote.find("state").text
 
-
         return newTdev
 
     @staticmethod
@@ -343,7 +403,7 @@ class tdev(mesObjets):
         toRun = SymDevList.replace('%%sid%%', sid)
         listeDetailsDevicesXML = mesObjets.runFindall(toRun, 'Symmetrix/Device')
 
-        logger.info("NB elt : "+str(len(listeDetailsDevicesXML)))
+        logger.info("NB elt : " + str(len(listeDetailsDevicesXML)))
 
         toRun = SymCfgListTdev.replace('%%sid%%', sid)
         listDdevices = []
@@ -393,8 +453,9 @@ class symmetrix(mesObjets):
     list_disks = []
     list_devices = []
     list_sgs = []
-
-
+    list_fes = []
+    nb_engine = 0
+    nb_cache_raw_tb = 0
 
     @staticmethod
     def loadSymmetrixFromXML(symm):
@@ -419,7 +480,7 @@ class symmetrix(mesObjets):
         newSymmtrix.patch_level = symmEnginuity.find("patch_level").text
 
         if newSymmtrix.product_model not in Supported_Platform:
-            logger.error("Plateform not supported : "+newSymmtrix.product_model)
+            logger.error("Plateform not supported : " + newSymmtrix.product_model)
             return newSymmtrix
 
         #
@@ -435,7 +496,7 @@ class symmetrix(mesObjets):
         # Get efficiency data
         #
         toRun = SymcfgEfficiency.replace('%%sid%%', newSymmtrix.symid)
-        srp = mesObjets.runFind(toRun,"Symmetrix/SRP/SRP_Info")
+        srp = mesObjets.runFind(toRun, "Symmetrix/SRP/SRP_Info")
         newSymmtrix.srp_name = srp.find("name").text
 
         vp_eff = srp.find('vp_efficiency')
@@ -477,24 +538,33 @@ class symmetrix(mesObjets):
         #
         # Load Disks
         #
-        newSymmtrix.list_disks=disk.loadFromCommand(newSymmtrix.symid)
+        newSymmtrix.list_disks = disk.loadFromCommand(newSymmtrix.symid)
 
         #
         # Load devices
         #
-        newSymmtrix.list_devices=tdev.loadFromCommand(newSymmtrix.symid)
+        newSymmtrix.list_devices = tdev.loadFromCommand(newSymmtrix.symid)
 
         #
         # Load SG's
         #
-        newSymmtrix.list_sgs = storageGroup.loadFromCommand(newSymmtrix.symid,newSymmtrix.list_devices)
+        newSymmtrix.list_sgs = storageGroup.loadFromCommand(newSymmtrix.symid, newSymmtrix.list_devices)
 
         #
-        # Construct SG_Devices Report
+        # get Engines and cache
         #
+        toRun = SymCfgListMemory.replace('%%sid%%', newSymmtrix.symid)
+        memory = mesObjets.runFind(toRun, "Symmetrix/Symm_Info")
+
+        newSymmtrix.nb_engine = int(memory.find("total_mem_boards").text)//2
+        newSymmtrix.nb_cache_raw_tb = ((int(memory.find("total_cap_in_mb").text)//1000000)+1)*2
+
+        #
+        # grab the FA pors (frontend FC emulation)
+        #
+        newSymmtrix.list_fes=frontEndPorts.loadFromCommand(newSymmtrix.symid)
 
         return newSymmtrix
-
 
 
 #
@@ -502,12 +572,38 @@ class symmetrix(mesObjets):
 #
 
 
+def objectToXLS(Cell,chaine : str ,monObject : mesObjets):
+    if str(cell.value).startswith(chaine):
+        #
+        # Manage Sym Data
+        #
+        Attributes = str(cell.value).replace(chaine, "")
+        cell.value = monObject.getValue(Attributes)
+
+def ListToXLS(feuille, Cell,chaine : str ,maListe : [mesObjets]):
+    if str(cell.value).startswith(chaine):
+        #
+        # Manage Liste of disks
+        #
+        Attributes = str(cell.value).replace(chaine, "")
+        row_x = cell.row
+        column_y = cell.column
+        for elt in maListe:
+            #
+            # on écrit de bas en haut.
+            #
+            celltoupd = feuille.cell(row=row_x, column=column_y)
+            celltoupd.value = elt.getValue(Attributes)
+            row_x = row_x + 1
+
+
+
+
 # 'application' code
 logger.info("Start")
 
 for symm in mesObjets.runFindall(SymcfgList, 'Symmetrix'):
     MySymm = symmetrix.loadSymmetrixFromXML(symm)
-
 
     #
 
@@ -522,64 +618,21 @@ for symm in mesObjets.runFindall(SymcfgList, 'Symmetrix'):
 
     classeur = openpyxl.load_workbook(MySymm.symid + '.xlsx')
 
-    for feuille_name in classeur.get_sheet_names():
+    for feuille_name in classeur.sheetnames:
         #
         # On parcourt les pages
         #
-        feuille = classeur.get_sheet_by_name(feuille_name)
+        feuille = classeur[feuille_name]
         for ligne in feuille.iter_rows():
             for cell in ligne:
                 #
                 # Analyse et travaille ici
                 #
-                if (str(cell.value).startswith("%%sym.")):
-                    #
-                    # Manage Sym Data
-                    #
-                    Attributes = str(cell.value).replace("%%sym.", "")
-                    cell.value = MySymm.getValue(Attributes)
-                if (str(cell.value).startswith("%%list.disks.")):
-                    #
-                    # Manage Liste of disks
-                    #
-                    Attributes = str(cell.value).replace("%%list.disks.", "")
-                    row_x = cell.row
-                    column_y = cell.column
-                    for disque in MySymm.list_disks:
-                        #
-                        # on écrit de bas en haut.
-                        #
-                        celltoupd = feuille.cell(row=row_x, column=column_y)
-                        celltoupd.value = disque.getValue(Attributes)
-                        row_x = row_x + 1
-                if (str(cell.value).startswith("%%list.tdevs.")):
-                    #
-                    # Manage Liste of disks
-                    #
-                    Attributes = str(cell.value).replace("%%list.tdevs.", "")
-                    row_x = cell.row
-                    column_y = cell.column
-                    for device in MySymm.list_devices:
-                        #
-                        # on écrit de bas en haut.
-                        #
-                        celltoupd = feuille.cell(row=row_x, column=column_y)
-                        celltoupd.value = device.getValue(Attributes)
-                        row_x = row_x + 1
-                if (str(cell.value).startswith("%%list.sgs.")):
-                    #
-                    # Manage Liste of disks
-                    #
-                    Attributes = str(cell.value).replace("%%list.sgs.", "")
-                    row_x = cell.row
-                    column_y = cell.column
-                    for sg in MySymm.list_sgs:
-                        #
-                        # on écrit de bas en haut.
-                        #
-                        celltoupd = feuille.cell(row=row_x, column=column_y)
-                        celltoupd.value = sg.getValue(Attributes)
-                        row_x = row_x + 1
+                objectToXLS(cell,"%%sym.",MySymm)
+                ListToXLS(feuille,cell,"%%list.disks.",MySymm.list_disks)
+                ListToXLS(feuille, cell, "%%list.tdevs.", MySymm.list_devices)
+                ListToXLS(feuille, cell, "%%list.sgs.", MySymm.list_sgs)
+                ListToXLS(feuille, cell, "%%list.fes.", MySymm.list_fes)
 
     #
     # Save File
