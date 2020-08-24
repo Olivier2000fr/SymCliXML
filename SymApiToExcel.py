@@ -51,6 +51,8 @@ SymDevList = 'symdev list -sid %%sid%%  -v -out xml '
 SymCfgListMemory = 'symcfg -sid %%sid%%  list -memory -out xml'
 SymCfgListFa = 'symcfg -sid %%sid%%  list -fa all -v -out xml'
 SymCfgListRa = 'symcfg -sid %%sid%%  list -ra all -v -out xml'
+SymSnapvxListe ='symsnapvx -sid %%sid%% list -v -out xml'
+SymSnapVXListDetails = 'symsnapvx -sid %%sid%% list -v -snapshot %%snap%% -dev %%dev%% -detail -gb -out xml'
 Supported_Platform = ['VMAX250F', 'VMAX950F', 'VMAX450F', 'VMAX850F', 'PowerMax_8000', 'PowerMax_2000']
 
 
@@ -246,6 +248,154 @@ class disk(mesObjets):
             listDisks.append(disk.loadSymmetrixFromXML(galette))
         return listDisks
 
+class snapshotDetails(mesObjets):
+    """
+    class for the snaphosts header (general info)
+
+    Aim it to list all available snapshots and volumes in it
+
+    Additionnal infor for all generations will be done in anoterh class
+
+    No special methods except :
+    loadfromXML and loadfrom command (symdisk).
+    loadfromXML do the mapping from XML to Object
+
+    """
+    source = ""
+    snapshot_name = ""
+    timestamp = ""
+    generation = 0
+    link = ""
+    restore = ""
+    failed  = ""
+    error_reason = ""
+    GCM = ""
+    zDP = ""
+    secured = ""
+    expanded = ""
+    total_snapshot_dev_size_gb = 0
+    total_deltas_gb = 0
+    non_shared_gb = 0
+    expiration_date = 0
+
+    @staticmethod
+    def loadSymmetrixFromXML(snapshotXML):
+        MySnap = snapshotDetails()
+        MySnap.source = snapshotXML.find("source").text
+        MySnap.snapshot_name = snapshotXML.find("snapshot_name").text
+        MySnap.timestamp = snapshotXML.find("timestamp").text
+        MySnap.generation = int(snapshotXML.find("generation").text)
+        MySnap.link = snapshotXML.find("link").text
+        MySnap.restore = snapshotXML.find("restore").text
+        MySnap.failed = snapshotXML.find("failed").text
+        MySnap.error_reason = snapshotXML.find("error_reason").text
+        MySnap.GCM = snapshotXML.find("GCM").text
+        MySnap.zDP = snapshotXML.find("zDP").text
+        MySnap.secured = snapshotXML.find("secured").text
+        MySnap.expanded = snapshotXML.find("expanded").text
+        MySnap.total_snapshot_dev_size_gb = float(snapshotXML.find("total_snapshot_dev_size_gb").text)
+        MySnap.total_deltas_gb = float(snapshotXML.find("total_deltas_gb").text)
+        MySnap.non_shared_gb = float(snapshotXML.find("non_shared_gb").text)
+        MySnap.expiration_date = snapshotXML.find("expiration_date").text
+
+        return MySnap
+
+    @staticmethod
+    def loadFromCommand(sid,liste_snapH) -> list:
+        listSnapshotDetails = []
+        for snapH in liste_snapH:
+            #
+            # you loop on the snapshot headers (snap Name
+            #
+            for device in snapH.device_list:
+                #
+                # you loop on deices inside the snaps
+                #
+                toRun = SymSnapVXListDetails.replace('%%sid%%', sid)
+                toRun = toRun.replace('%%dev%%', device)
+                toRun = toRun.replace('%%snap%%', snapH.snapshot_name)
+                for snapD in mesObjets.runFindall(toRun,"Symmetrix/Snapvx/Snapshot"):
+                    snapshotDetail = snapshotDetails.loadSymmetrixFromXML(snapD)
+                    listSnapshotDetails.append(snapshotDetail)
+                    snapH.total_snapshot_dev_size_gb = snapH.total_snapshot_dev_size_gb + snapshotDetail.total_snapshot_dev_size_gb
+                    snapH.total_deltas_gb = snapH.total_deltas_gb + snapshotDetail.total_deltas_gb
+                    snapH.non_shared_gb = snapH.non_shared_gb + snapshotDetail.non_shared_gb
+
+        return listSnapshotDetails
+
+class snapshotMaster(mesObjets):
+    """
+    class for the snaphosts header (general info)
+
+    Aim it to list all available snapshots and volumes in it
+
+    Additionnal infor for all generations will be done in anoterh class
+
+    No special methods except :
+    loadfromXML and loadfrom command (symdisk).
+    loadfromXML do the mapping from XML to Object
+
+    """
+    source = ""
+    snapshot_name = ""
+    last_timestamp = ""
+    num_generations = 0
+    link = ""
+    restore = ""
+    failed = ""
+    error_reason = ""
+    GCM = ""
+    zDP = ""
+    secured = ""
+    expanded = ""
+    device_list = []
+    total_snapshot_dev_size_gb = 0
+    total_deltas_gb = 0
+    non_shared_gb = 0
+
+
+    @staticmethod
+    def loadSymmetrixFromXML(snapshotXML):
+        MySnap = snapshotMaster()
+        MySnap.source = snapshotXML.find("source").text
+        MySnap.snapshot_name = snapshotXML.find("snapshot_name").text
+        MySnap.last_timestamp = snapshotXML.find("last_timestamp").text
+        MySnap.num_generations = int(snapshotXML.find("num_generations").text)
+        MySnap.link = snapshotXML.find("link").text
+        MySnap.restore = snapshotXML.find("restore").text
+        MySnap.failed = snapshotXML.find("failed").text
+        MySnap.error_reason = snapshotXML.find("error_reason").text
+        MySnap.GCM = snapshotXML.find("GCM").text
+        MySnap.zDP = snapshotXML.find("zDP").text
+        MySnap.secured = snapshotXML.find("secured").text
+        MySnap.expanded = snapshotXML.find("expanded").text
+        MySnap.device_list = []
+        MySnap.device_list.append(MySnap.source)
+
+        return MySnap
+
+    @staticmethod
+    def findSnapShotMaster(liste,name):
+        for elt in liste:
+            if elt.snapshot_name == name:
+                return elt
+        return None
+
+    @staticmethod
+    def loadFromCommand(sid) -> list:
+        toRun = SymSnapvxListe.replace('%%sid%%', sid)
+        listSnapshotMaster = []
+        for snapshot in mesObjets.runFindall(toRun, 'Symmetrix/Snapvx/Snapshot'):
+            snap = snapshotMaster.loadSymmetrixFromXML(snapshot)
+            exist = snapshotMaster.findSnapShotMaster(listSnapshotMaster,snap.snapshot_name)
+            if exist is None:
+                listSnapshotMaster.append(snap)
+            else:
+                exist.source=exist.source+","+snap.source
+                exist.device_list.append(snap.source)
+        return listSnapshotMaster
+
+
 
 
 class storageGroup(mesObjets):
@@ -384,7 +534,7 @@ class tdev(mesObjets):
             dev_name = devinfo.find("dev_name").text
             if dev_name == ID:
                 return device
-        logger.error("Device not found : " + ID)
+        logger.info("Device not found : " + ID)
         return ""
 
     @staticmethod
@@ -505,6 +655,8 @@ class symmetrix(mesObjets):
     list_ras = []
     nb_engine = 0
     nb_cache_raw_tb = 0
+    list_sm = []
+    list_sd = []
 
     @staticmethod
     def loadSymmetrixFromXML(symm):
@@ -618,6 +770,14 @@ class symmetrix(mesObjets):
         #
         newSymmtrix.list_ras = replicationPorts.loadFromCommand(newSymmtrix.symid)
 
+        #
+        # grab the snapshot masters
+        #
+
+        newSymmtrix.list_sm = snapshotMaster.loadFromCommand(newSymmtrix.symid)
+        newSymmtrix.list_sd = snapshotDetails.loadFromCommand(newSymmtrix.symid,newSymmtrix.list_sm)
+
+
         return newSymmtrix
 
 
@@ -688,6 +848,8 @@ for symm in mesObjets.runFindall(SymcfgList, 'Symmetrix'):
                 ListToXLS(feuille, cell, "%%list.sgs.", MySymm.list_sgs)
                 ListToXLS(feuille, cell, "%%list.fes.", MySymm.list_fes)
                 ListToXLS(feuille, cell, "%%list.ras.", MySymm.list_ras)
+                ListToXLS(feuille, cell, "%%list.sm.", MySymm.list_sm)
+                ListToXLS(feuille, cell, "%%list.sd.", MySymm.list_sd)
 
     #
     # Save File
