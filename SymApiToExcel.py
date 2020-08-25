@@ -41,6 +41,7 @@ variable %% %% is peace of text that will be later replace byt the parameter val
 
 """
 SymcfgList = 'symcfg list -v -output xml'
+SymCfgListSrp = 'symcfg list -sid %%sid%% -srp -detail -out xml'
 SymcfgEfficiency = 'symcfg -sid %%sid%% -srp -efficiency list -output xml'
 SymcfgDemand = 'symcfg -sid %%sid%% list  -demand -v -tb -out xml'
 SymCfgListTdev = 'symcfg -sid %%sid%% list -tdev -out xml'
@@ -53,7 +54,7 @@ SymCfgListFa = 'symcfg -sid %%sid%%  list -fa all -v -out xml'
 SymCfgListRa = 'symcfg -sid %%sid%%  list -ra all -v -out xml'
 SymSnapvxListe ='symsnapvx -sid %%sid%% list -v -out xml'
 SymSnapVXListDetails = 'symsnapvx -sid %%sid%% list -v -snapshot %%snap%% -dev %%dev%% -detail -gb -out xml'
-Supported_Platform = ['VMAX250F', 'VMAX950F', 'VMAX450F', 'VMAX850F', 'PowerMax_8000', 'PowerMax_2000']
+Supported_Platform = ['VMAX100K','VMAX200K','VMAX400K','VMAX250F', 'VMAX950F', 'VMAX450F', 'VMAX850F', 'PowerMax_8000', 'PowerMax_2000']
 
 
 class mesObjets:
@@ -108,6 +109,16 @@ class mesObjets:
             result = -1
         else:
             result = int(Value)
+
+        return result
+
+    @staticmethod
+    def ifNAtoFloat(Value):
+        result = 0.0
+        if (Value == "N/A"):
+            result = -1.0
+        else:
+            result = float(Value)
 
         return result
 
@@ -708,7 +719,7 @@ class symmetrix(mesObjets):
 
         drr_eff = srp.find('data_reduction')
         newSymmtrix.data_reduction = drr_eff.find("ratio").text
-        newSymmtrix.drr_enabled_pct = int(drr_eff.find("enabled_percent").text)
+        newSymmtrix.drr_enabled_pct = mesObjets.ifNAtoInt(drr_eff.find("enabled_percent").text)
 
         ovr_eff = srp.find('SRP_efficiency')
         newSymmtrix.SRP_efficiency = ovr_eff.find("overall_ratio").text
@@ -719,22 +730,43 @@ class symmetrix(mesObjets):
         toRun = SymcfgDemand.replace('%%sid%%', newSymmtrix.symid)
         srp = mesObjets.runFind(toRun, "Symmetrix")
 
-        newSymmtrix.effective_used_cap_percent = int(srp.find("effective_used_cap_percent").text)
-        newSymmtrix.usable_capacity_tb = float(srp.find("usable_capacity_tb").text)
-        newSymmtrix.user_used_capacity_tb = float(srp.find("user_used_capacity_tb").text)
-        newSymmtrix.used_capacity_tb = float(srp.find("used_capacity_tb").text)
-        newSymmtrix.free_capacity_tb = newSymmtrix.usable_capacity_tb - newSymmtrix.used_capacity_tb
-        newSymmtrix.subscribed_capacity_tb = float(srp.find("subscribed_capacity_tb").text)
-        newSymmtrix.system_used_capacity_tb = float(srp.find("system_used_capacity_tb").text)
-        newSymmtrix.temp_used_capacity_tb = float(srp.find("temp_used_capacity_tb").text)
-        newSymmtrix.array_meta_data_used_percent = int(srp.find("array_meta_data_used_percent").text)
-        newSymmtrix.repl_meta_data_used_percent = int(srp.find("repl_meta_data_used_percent").text)
-        newSymmtrix.fe_meta_data_used_percent = mesObjets.ifNAtoInt(srp.find("fe_meta_data_used_percent").text)
-        newSymmtrix.be_meta_data_used_percent = mesObjets.ifNAtoInt(srp.find("be_meta_data_used_percent").text)
-        newSymmtrix.snapshot_capacity_tb = float(srp.find("snapshot_capacity_tb").text)
-        newSymmtrix.snapshot_cap_nonshared_tb = float(srp.find("snapshot_cap_nonshared_tb").text)
-        newSymmtrix.snapshot_cap_shared_tb = float(srp.find("snapshot_cap_shared_tb").text)
-        newSymmtrix.snapshot_cap_modified_percent = int(srp.find("snapshot_cap_modified_percent").text)
+        if newSymmtrix.product_model in ['VMAX100K','VMAX200K','VMAX400K']:
+            toRun = SymCfgListSrp.replace('%%sid%%', newSymmtrix.symid)
+            srp = mesObjets.runFind(toRun, "Symmetrix/SRP/SRP_Info")
+
+            newSymmtrix.usable_capacity_tb = mesObjets.ifNAtoFloat(srp.find("usable_capacity_terabytes").text)
+            newSymmtrix.user_used_capacity_tb = 0
+            newSymmtrix.free_capacity_tb = mesObjets.ifNAtoFloat(srp.find("free_capacity_terabytes").text)
+            newSymmtrix.subscribed_capacity_tb = mesObjets.ifNAtoFloat(srp.find("subscribed_capacity_terabytes").text)
+            newSymmtrix.system_used_capacity_tb = 0
+            newSymmtrix.used_capacity_tb = newSymmtrix.usable_capacity_tb - newSymmtrix.free_capacity_tb
+            newSymmtrix.temp_used_capacity_tb = 0
+            newSymmtrix.array_meta_data_used_percent = 0
+            newSymmtrix.repl_meta_data_used_percent = 0
+            newSymmtrix.fe_meta_data_used_percent = 0
+            newSymmtrix.be_meta_data_used_percent = 0
+            newSymmtrix.snapshot_capacity_tb = 0
+            newSymmtrix.snapshot_cap_nonshared_tb = 0
+            newSymmtrix.snapshot_cap_shared_tb = 0
+            newSymmtrix.snapshot_cap_modified_percent = 0
+            newSymmtrix.effective_used_cap_percent = (newSymmtrix.used_capacity_tb * 100)//newSymmtrix.usable_capacity_tb
+        else:
+            newSymmtrix.effective_used_cap_percent = mesObjets.ifNAtoInt(srp.find("effective_used_cap_percent").text)
+            newSymmtrix.usable_capacity_tb = mesObjets.ifNAtoFloat(srp.find("usable_capacity_tb").text)
+            newSymmtrix.user_used_capacity_tb = mesObjets.ifNAtoFloat(srp.find("user_used_capacity_tb").text)
+            newSymmtrix.used_capacity_tb = mesObjets.ifNAtoFloat(srp.find("used_capacity_tb").text)
+            newSymmtrix.free_capacity_tb = newSymmtrix.usable_capacity_tb - newSymmtrix.used_capacity_tb
+            newSymmtrix.subscribed_capacity_tb = mesObjets.ifNAtoFloat(srp.find("subscribed_capacity_tb").text)
+            newSymmtrix.system_used_capacity_tb = mesObjets.ifNAtoFloat(srp.find("system_used_capacity_tb").text)
+            newSymmtrix.temp_used_capacity_tb = mesObjets.ifNAtoFloat(srp.find("temp_used_capacity_tb").text)
+            newSymmtrix.array_meta_data_used_percent = mesObjets.ifNAtoInt(srp.find("array_meta_data_used_percent").text)
+            newSymmtrix.repl_meta_data_used_percent = mesObjets.ifNAtoInt(srp.find("repl_meta_data_used_percent").text)
+            newSymmtrix.fe_meta_data_used_percent = mesObjets.ifNAtoInt(srp.find("fe_meta_data_used_percent").text)
+            newSymmtrix.be_meta_data_used_percent = mesObjets.ifNAtoInt(srp.find("be_meta_data_used_percent").text)
+            newSymmtrix.snapshot_capacity_tb = mesObjets.ifNAtoFloat(srp.find("snapshot_capacity_tb").text)
+            newSymmtrix.snapshot_cap_nonshared_tb = mesObjets.ifNAtoFloat(srp.find("snapshot_cap_nonshared_tb").text)
+            newSymmtrix.snapshot_cap_shared_tb = mesObjets.ifNAtoFloat(srp.find("snapshot_cap_shared_tb").text)
+            newSymmtrix.snapshot_cap_modified_percent = mesObjets.ifNAtoInt(srp.find("snapshot_cap_modified_percent").text)
 
         #
         # Load Disks
@@ -818,47 +850,48 @@ logger.info("Start")
 
 for symm in mesObjets.runFindall(SymcfgList, 'Symmetrix'):
     MySymm = symmetrix.loadSymmetrixFromXML(symm)
-
-    #
-
-    #
-    # Copy XLS
-    #
-    copyfile("reference.xlsx", MySymm.symid + '.xlsx')
-
-    #
-    # open the file and start to work
-    #
-
-    classeur = openpyxl.load_workbook(MySymm.symid + '.xlsx')
-
-    for feuille_name in classeur.sheetnames:
-        #
-        # On parcourt les pages
-        #
-        feuille = classeur[feuille_name]
-        for ligne in feuille.iter_rows():
-            for cell in ligne:
-                #
-                # Analyse et travaille ici
-                #
-                objectToXLS(cell,"%%sym.",MySymm)
-                ListToXLS(feuille,cell,"%%list.disks.",MySymm.list_disks)
-                ListToXLS(feuille, cell, "%%list.tdevs.", MySymm.list_devices)
-                ListToXLS(feuille, cell, "%%list.sgs.", MySymm.list_sgs)
-                ListToXLS(feuille, cell, "%%list.fes.", MySymm.list_fes)
-                ListToXLS(feuille, cell, "%%list.ras.", MySymm.list_ras)
-                ListToXLS(feuille, cell, "%%list.sm.", MySymm.list_sm)
-                ListToXLS(feuille, cell, "%%list.sd.", MySymm.list_sd)
-
-    #
-    # Save File
-    #
-    classeur.save(MySymm.symid + '.xlsx')
-
     print(MySymm.toString())
-#    for child in symm:
-#        print(child.tag, child.attrib)
+
+    if MySymm.product_model in Supported_Platform:
+        #
+        # Copy XLS
+        #
+        copyfile("reference.xlsx", MySymm.symid + '.xlsx')
+
+        #
+        # open the file and start to work
+        #
+
+        classeur = openpyxl.load_workbook(MySymm.symid + '.xlsx')
+
+        for feuille_name in classeur.sheetnames:
+            #
+            # On parcourt les pages
+            #
+            feuille = classeur[feuille_name]
+            for ligne in feuille.iter_rows():
+                for cell in ligne:
+                    #
+                    # Analyse et travaille ici
+                    #
+                    objectToXLS(cell,"%%sym.",MySymm)
+                    ListToXLS(feuille,cell,"%%list.disks.",MySymm.list_disks)
+                    ListToXLS(feuille, cell, "%%list.tdevs.", MySymm.list_devices)
+                    ListToXLS(feuille, cell, "%%list.sgs.", MySymm.list_sgs)
+                    ListToXLS(feuille, cell, "%%list.fes.", MySymm.list_fes)
+                    ListToXLS(feuille, cell, "%%list.ras.", MySymm.list_ras)
+                    ListToXLS(feuille, cell, "%%list.sm.", MySymm.list_sm)
+                    ListToXLS(feuille, cell, "%%list.sd.", MySymm.list_sd)
+
+        #
+        # Save File
+        #
+        classeur.save(MySymm.symid + '.xlsx')
+    else:
+        print(MySymm.symid + " is not supported ===== Skip")
+
+    #    for child in symm:
+    #        print(child.tag, child.attrib)
 
 
 logger.info("End")
