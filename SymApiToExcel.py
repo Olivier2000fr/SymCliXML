@@ -11,6 +11,8 @@
 
 import logging
 import copy
+from pathlib import Path
+import os
 import logging.config
 import subprocess
 import xml.etree.ElementTree as ET
@@ -87,19 +89,28 @@ class mesObjets:
         return
 
     @staticmethod
-    def runFindall(toRun, toSearch) -> list:
-        logger.info("RunALL : " + toRun)
-        logger.info("FilterAll : " + toSearch)
+    def _runfind(toRun, toSearch) -> str:
+        logger.info("_runfind : " + toRun)
+        logger.info("_runfind : " + toSearch)
         liste = subprocess.check_output(toRun, shell=True)
-        tableauXML = ET.fromstring(liste)
+        #toRun = toRun + " > temp.temp"
+        #ret = os.system(toRun)
+        #
+        #  Gestion du code retour à faire
+        #
+        #liste = Path('temp.temp').read_text()
+        return liste
+
+
+
+    @staticmethod
+    def runFindall(toRun, toSearch) -> list:
+        tableauXML = ET.fromstring(mesObjets._runfind(toRun, toSearch))
         return tableauXML.findall(toSearch)
 
     @staticmethod
     def runFind(toRun, toSearch) -> list:
-        logger.info("Run : " + toRun)
-        logger.info("Filter : " + toSearch)
-        liste = subprocess.check_output(toRun, shell=True)
-        tableauXML = ET.fromstring(liste)
+        tableauXML = ET.fromstring(mesObjets._runfind(toRun, toSearch))
         return tableauXML.find(toSearch)
 
     @staticmethod
@@ -446,6 +457,7 @@ class storageGroup(mesObjets):
         sg.name = sginfo.find("name").text
         sg.emulation = sginfo.find("emulation").text
         sg.Masking_views = sginfo.find("Masking_views").text
+
         sg.SLO_name = sginfo.find("SLO_name").text
         sg.Compression = sginfo.find("Compression").text
         sg.vp_saved_percent = sginfo.find("vp_saved_percent").text
@@ -665,7 +677,7 @@ class symmetrix(mesObjets):
     list_fes = []
     list_ras = []
     nb_engine = 0
-    nb_cache_raw_tb = 0
+    nb_cache_raw_tb = 0.0
     list_sm = []
     list_sd = []
 
@@ -768,10 +780,32 @@ class symmetrix(mesObjets):
             newSymmtrix.snapshot_cap_shared_tb = mesObjets.ifNAtoFloat(srp.find("snapshot_cap_shared_tb").text)
             newSymmtrix.snapshot_cap_modified_percent = mesObjets.ifNAtoInt(srp.find("snapshot_cap_modified_percent").text)
 
+
+
         #
         # Load Disks
         #
         newSymmtrix.list_disks = disk.loadFromCommand(newSymmtrix.symid)
+
+        #
+        # get Engines and cache
+        #
+        toRun = SymCfgListMemory.replace('%%sid%%', newSymmtrix.symid)
+        memory = mesObjets.runFind(toRun, "Symmetrix/Symm_Info")
+
+        newSymmtrix.nb_engine = int(memory.find("total_mem_boards").text) // 2
+
+        memory = mesObjets.runFindall(toRun, "Symmetrix/Memory_Board")
+        newSymmtrix.nb_cache_raw_tb=0.0
+        for board in memory:
+            val = float(board.find("capacity_in_mb").text)
+            if val > 800000:
+                newSymmtrix.nb_cache_raw_tb=newSymmtrix.nb_cache_raw_tb+1
+            elif val > 400000:
+                newSymmtrix.nb_cache_raw_tb = newSymmtrix.nb_cache_raw_tb + 0.5
+            else:
+                newSymmtrix.nb_cache_raw_tb = newSymmtrix.nb_cache_raw_tb + 0.25
+        print(newSymmtrix.nb_cache_raw_tb)
 
         #
         # Load devices
@@ -783,14 +817,6 @@ class symmetrix(mesObjets):
         #
         newSymmtrix.list_sgs = storageGroup.loadFromCommand(newSymmtrix.symid, newSymmtrix.list_devices)
 
-        #
-        # get Engines and cache
-        #
-        toRun = SymCfgListMemory.replace('%%sid%%', newSymmtrix.symid)
-        memory = mesObjets.runFind(toRun, "Symmetrix/Symm_Info")
-
-        newSymmtrix.nb_engine = int(memory.find("total_mem_boards").text)//2
-        newSymmtrix.nb_cache_raw_tb = ((int(memory.find("total_cap_in_mb").text)//1000000)+1)*2
 
         #
         # grab the FA pors (frontend FC emulation)
@@ -849,6 +875,14 @@ def ListToXLS(feuille, Cell,chaine : str ,maListe : [mesObjets]):
 logger.info("Start")
 
 for symm in mesObjets.runFindall(SymcfgList, 'Symmetrix'):
+    #
+    # Test if local or nor
+    #
+    symminfo=symm.find("Symm_Info")
+    if symminfo.find("attachment").text == 'Remote':
+        print(MySymm.symid + " is not local ===== Skip")
+        continue
+
     MySymm = symmetrix.loadSymmetrixFromXML(symm)
     print(MySymm.toString())
 
