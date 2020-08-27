@@ -7,6 +7,12 @@
 
  Developped during off hours (vacations)
  Code is licences under GNU GPL v3
+
+ TODO :
+  Rajouter l'information sur le TDEV de montage d'un snap (ID destiantion). PAS D'idée pour le moment
+  Rajouter les flgas sur les SG
+
+
 """
 
 import logging
@@ -55,7 +61,8 @@ SymCfgListMemory = 'symcfg -sid %%sid%%  list -memory -out xml'
 SymCfgListFa = 'symcfg -sid %%sid%%  list -fa all -v -out xml'
 SymCfgListRa = 'symcfg -sid %%sid%%  list -ra all -v -out xml'
 SymSnapvxListe ='symsnapvx -sid %%sid%% list -v -out xml'
-SymSnapVXListDetails = 'symsnapvx -sid %%sid%% list -v -snapshot %%snap%% -dev %%dev%% -detail -gb -out xml'
+SymSnapVXListDetails = 'symsnapvx -sid %%sid%% list -v -snapshot %%snap%% -dev 00001:FFFFF -detail -gb -out xml'
+SymcfgListEmulation = 'symcfg -sid %%sid%% list -dir all -out xml'
 Supported_Platform = ['VMAX100K','VMAX200K','VMAX400K','VMAX250F', 'VMAX950F', 'VMAX450F', 'VMAX850F', 'PowerMax_8000', 'PowerMax_2000']
 
 
@@ -93,12 +100,6 @@ class mesObjets:
         logger.info("_runfind : " + toRun)
         logger.info("_runfind : " + toSearch)
         liste = subprocess.check_output(toRun, shell=True)
-        #toRun = toRun + " > temp.temp"
-        #ret = os.system(toRun)
-        #
-        #  Gestion du code retour à faire
-        #
-        #liste = Path('temp.temp').read_text()
         return liste
 
 
@@ -132,6 +133,53 @@ class mesObjets:
             result = float(Value)
 
         return result
+
+
+class emulation(mesObjets):
+    """
+    class for the FE ports (Frontend FC) FA Emulation
+
+    Aim it to list all available Frontend Ports
+
+    No special methods except :
+    loadfromXML and loadfrom command (symdisk).
+    loadfromXML do the mapping from XML to Object
+
+    """
+    id = ""
+    type = ""
+    symbolic = ""
+    number = 0
+    slot = 0
+    status = ""
+    cores = 0
+    engine_num = 0
+    ports = 0
+
+    @staticmethod
+    def loadSymmetrixFromXML(dirinfoXML):
+        newEmulation = emulation()
+        newEmulation.id = dirinfoXML.find("id").text
+        newEmulation.type = dirinfoXML.find("type").text
+        newEmulation.symbolic = dirinfoXML.find("symbolic").text
+        newEmulation.number = int(dirinfoXML.find("number").text)
+        newEmulation.slot = int(dirinfoXML.find("slot").text)
+        newEmulation.status = dirinfoXML.find("status").text
+        newEmulation.cores = int(dirinfoXML.find("cores").text)
+        newEmulation.engine_num = int(dirinfoXML.find("engine_num").text)
+        newEmulation.ports = int(dirinfoXML.find("ports").text)
+
+        return newEmulation
+
+    @staticmethod
+    def loadFromCommand(sid) -> list:
+        toRun = SymcfgListEmulation.replace('%%sid%%', sid)
+        listEmulations = []
+        for director in mesObjets.runFindall(toRun, 'Symmetrix/Director'):
+            dir_info = director.find("Dir_Info")
+            listEmulations.append(emulation.loadSymmetrixFromXML(dir_info))
+        return listEmulations
+
 
 class frontEndPorts(mesObjets):
     """
@@ -329,19 +377,14 @@ class snapshotDetails(mesObjets):
             #
             # you loop on the snapshot headers (snap Name
             #
-            for device in snapH.device_list:
-                #
-                # you loop on deices inside the snaps
-                #
-                toRun = SymSnapVXListDetails.replace('%%sid%%', sid)
-                toRun = toRun.replace('%%dev%%', device)
-                toRun = toRun.replace('%%snap%%', snapH.snapshot_name)
-                for snapD in mesObjets.runFindall(toRun,"Symmetrix/Snapvx/Snapshot"):
-                    snapshotDetail = snapshotDetails.loadSymmetrixFromXML(snapD)
-                    listSnapshotDetails.append(snapshotDetail)
-                    snapH.total_snapshot_dev_size_gb = snapH.total_snapshot_dev_size_gb + snapshotDetail.total_snapshot_dev_size_gb
-                    snapH.total_deltas_gb = snapH.total_deltas_gb + snapshotDetail.total_deltas_gb
-                    snapH.non_shared_gb = snapH.non_shared_gb + snapshotDetail.non_shared_gb
+            toRun = SymSnapVXListDetails.replace('%%sid%%', sid)
+            toRun = toRun.replace('%%snap%%', snapH.snapshot_name)
+            for snapD in mesObjets.runFindall(toRun,"Symmetrix/Snapvx/Snapshot"):
+                snapshotDetail = snapshotDetails.loadSymmetrixFromXML(snapD)
+                listSnapshotDetails.append(snapshotDetail)
+                snapH.total_snapshot_dev_size_gb = snapH.total_snapshot_dev_size_gb + snapshotDetail.total_snapshot_dev_size_gb
+                snapH.total_deltas_gb = snapH.total_deltas_gb + snapshotDetail.total_deltas_gb
+                snapH.non_shared_gb = snapH.non_shared_gb + snapshotDetail.non_shared_gb
 
         return listSnapshotDetails
 
@@ -565,6 +608,7 @@ class tdev(mesObjets):
         newTdev = tdev()
         newTdev.dev_name = device.find("dev_name").text
         newTdev.dev_emul = device.find("dev_emul").text
+
         newTdev.total_tracks_gb = float(device.find("total_tracks_gb").text)
         newTdev.alloc_tracks_gb = float(device.find("alloc_tracks_gb").text)
         newTdev.compression_ratio = device.find("compression_ratio").text
@@ -590,6 +634,9 @@ class tdev(mesObjets):
         newTdev.status = Dev_Info.find("status").text
         newTdev.snapvx_source = Dev_Info.find("snapvx_source").text
         newTdev.snapvx_target = Dev_Info.find("snapvx_target").text
+
+        newTdev.emulation = Dev_Info.find("emulation").text
+        #print(newTdev.emulation)
 
         Dev_Info = details.find("Device_External_Identity")
         newTdev.wwn = Dev_Info.find("wwn").text
@@ -680,6 +727,7 @@ class symmetrix(mesObjets):
     nb_cache_raw_tb = 0.0
     list_sm = []
     list_sd = []
+    list_emu = []
 
     @staticmethod
     def loadSymmetrixFromXML(symm):
@@ -835,6 +883,11 @@ class symmetrix(mesObjets):
         newSymmtrix.list_sm = snapshotMaster.loadFromCommand(newSymmtrix.symid)
         newSymmtrix.list_sd = snapshotDetails.loadFromCommand(newSymmtrix.symid,newSymmtrix.list_sm)
 
+        #
+        # liste des emulations
+        #
+        newSymmtrix.list_emu = emulation.loadFromCommand(newSymmtrix.symid)
+
 
         return newSymmtrix
 
@@ -879,8 +932,9 @@ for symm in mesObjets.runFindall(SymcfgList, 'Symmetrix'):
     # Test if local or nor
     #
     symminfo=symm.find("Symm_Info")
+    curr_symmID = symminfo.find("symid").text
     if symminfo.find("attachment").text == 'Remote':
-        print(MySymm.symid + " is not local ===== Skip")
+        print(curr_symmID + " is not local ===== Skip")
         continue
 
     MySymm = symmetrix.loadSymmetrixFromXML(symm)
@@ -916,6 +970,7 @@ for symm in mesObjets.runFindall(SymcfgList, 'Symmetrix'):
                     ListToXLS(feuille, cell, "%%list.ras.", MySymm.list_ras)
                     ListToXLS(feuille, cell, "%%list.sm.", MySymm.list_sm)
                     ListToXLS(feuille, cell, "%%list.sd.", MySymm.list_sd)
+                    ListToXLS(feuille, cell, "%%list.emu.", MySymm.list_emu)
 
         #
         # Save File
