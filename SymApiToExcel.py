@@ -11,6 +11,7 @@
  TODO :
   Rajouter l'information sur le TDEV de montage d'un snap (ID destiantion). PAS D'idée pour le moment
   Rajouter les flgas sur les SG
+  Gérer les réplications SRDF multiples (passer à 2 mini).
 
 
 """
@@ -20,7 +21,7 @@ import copy
 from pathlib import Path
 import os
 import logging.config
-import subprocess
+import subprocess, os
 import xml.etree.ElementTree as ET
 import openpyxl
 from openpyxl import Workbook
@@ -99,6 +100,11 @@ class mesObjets:
     def _runfind(toRun, toSearch) -> str:
         logger.info("_runfind : " + toRun)
         logger.info("_runfind : " + toSearch)
+        #my_env=os.environ
+        #my_env.putenv("SYMCLI_OFFLINE","1")
+        #my_env.putenv("SYMCLI_SNAPVX_LIST_OFFLINE", "enabled")
+        #liste = subprocess.check_output(toRun, shell=True,env=my_env)
+
         liste = subprocess.check_output(toRun, shell=True)
         return liste
 
@@ -592,6 +598,16 @@ class tdev(mesObjets):
     remote_wwn = ""
     remote_state = ""
     rdf_mode = ""
+    pair_state_1 = ""
+    suspend_state_1 = ""
+    consistency_state_1 = ""
+    paired_with_concurrent_1 = ""
+    paired_with_cascaded_1 = ""
+    remote_dev_name_1 = ""
+    remote_symid_1 = ""
+    remote_wwn_1 = ""
+    remote_state_1 = ""
+    rdf_mode_1 = ""
 
     @staticmethod
     def findDetails(ID, listeDeviceDetails):
@@ -646,23 +662,38 @@ class tdev(mesObjets):
             for port in fe.findall("Port"):
                 newTdev.ports = newTdev.ports + port.find("director").text + "-" + port.find("port").text + ","
 
-        rdf = details.find("RDF")
-        if rdf is not None:
-            rdf_info = rdf.find("RDF_Info")
-            newTdev.pair_state = rdf_info.find("pair_state").text
-            newTdev.suspend_state = rdf_info.find("suspend_state").text
-            newTdev.consistency_state = rdf_info.find("consistency_state").text
-            newTdev.paired_with_concurrent = rdf_info.find("paired_with_concurrent").text
-            newTdev.paired_with_cascaded = rdf_info.find("paired_with_cascaded").text
-
-            rdf_mode = rdf.find("Mode")
-            newTdev.rdf_mode = rdf_mode.find("mode").text
-
-            remote = rdf.find("Remote")
-            newTdev.remote_dev_name = remote.find("dev_name").text
-            newTdev.remote_symid = remote.find("remote_symid").text
-            newTdev.remote_wwn = remote.find("wwn").text
-            newTdev.remote_state = remote.find("state").text
+        rdfAll = details.findall("RDF")
+        nbRDF=0
+        if rdfAll is not None:
+            for rdf in rdfAll:
+                rdf_info = rdf.find("RDF_Info")
+                rdf_mode = rdf.find("Mode")
+                remote = rdf.find("Remote")
+                if nbRDF == 0:
+                    newTdev.pair_state = rdf_info.find("pair_state").text
+                    newTdev.suspend_state = rdf_info.find("suspend_state").text
+                    newTdev.consistency_state = rdf_info.find("consistency_state").text
+                    newTdev.paired_with_concurrent = rdf_info.find("paired_with_concurrent").text
+                    newTdev.paired_with_cascaded = rdf_info.find("paired_with_cascaded").text
+                    newTdev.rdf_mode = rdf_mode.find("mode").text
+                    newTdev.remote_dev_name = remote.find("dev_name").text
+                    newTdev.remote_symid = remote.find("remote_symid").text
+                    newTdev.remote_wwn = remote.find("wwn").text
+                    newTdev.remote_state = remote.find("state").text
+                else:
+                    newTdev.pair_state_1 = rdf_info.find("pair_state").text
+                    newTdev.suspend_state_1 = rdf_info.find("suspend_state").text
+                    newTdev.consistency_state_1 = rdf_info.find("consistency_state").text
+                    newTdev.paired_with_concurrent_1 = rdf_info.find("paired_with_concurrent").text
+                    newTdev.paired_with_cascaded_1 = rdf_info.find("paired_with_cascaded").text
+                    newTdev.rdf_mode_1 = rdf_mode.find("mode").text
+                    newTdev.remote_dev_name_1 = remote.find("dev_name").text
+                    newTdev.remote_symid_1 = remote.find("remote_symid").text
+                    newTdev.remote_wwn_1 = remote.find("wwn").text
+                    newTdev.remote_state_1 = remote.find("state").text
+                nbRDF=nbRDF+1
+                if nbRDF>2:
+                    print(newTdev.dev_name+" "+str(nbRDF)+" SRDF")
 
         return newTdev
 
@@ -891,6 +922,30 @@ class symmetrix(mesObjets):
 
         return newSymmtrix
 
+class smallSym(mesObjets):
+    symmID = ""
+    attachement = ""
+    product_model = ""
+
+    @staticmethod
+    def loadFromCommand() -> list:
+        symList = []
+        for symm in mesObjets.runFindall(SymcfgList, 'Symmetrix'):
+
+            mySym = smallSym()
+            symminfo = symm.find("Symm_Info")
+            mySym.symmID = symminfo.find("symid").text
+            mySym.attachement = symminfo.find("attachment").text
+            mySym.product_model = symminfo.find("product_model").text
+            if mySym.product_model in Supported_Platform:
+                symList.append(mySym)
+            else:
+                print("skip unsupported system "+mySym.symmID+" / "+ mySym.product_model)
+                logger.info("skip unsupported system "+mySym.symmID+" / "+ mySym.product_model)
+        return symList
+
+
+
 
 #
 # Main
@@ -927,14 +982,47 @@ def ListToXLS(feuille, Cell,chaine : str ,maListe : [mesObjets]):
 # 'application' code
 logger.info("Start")
 
+listSymm = smallSym.loadFromCommand()
+print("List of discovered systems : ")
+
+pos = 0
+answer_list=[]
+answer_list.append("ALL")
+answer_list.append("QUIT")
+while pos < len(listSymm):
+    answer_list.append((str(pos)))
+    pos=pos+1
+
+pos = 0
+for smallsym in listSymm:
+    print(str(pos)+' - ' + smallsym.symmID + ' (' + smallsym.attachement + ') - ' + smallsym.product_model)
+    pos = pos+1
+
+print("")
+print("please enter the system to process (0 to "+str(len(listSymm)-1)+") or ALL or QUIT")
+answer = input("which system to process : ")
+while answer not in answer_list:
+    answer = input("which system to process : ")
+
+if answer == 'QUIT':
+    print("")
+    logger.info("This is the end")
+    exit(0)
+
+list_sym = []
+
+if answer == "ALL":
+    for smallsym in listSymm:
+        list_sym.append(smallsym.symmID)
+else:
+    list_sym.append(listSymm[int(answer)].symmID)
+
+
 for symm in mesObjets.runFindall(SymcfgList, 'Symmetrix'):
-    #
-    # Test if local or nor
-    #
-    symminfo=symm.find("Symm_Info")
+    symminfo = symm.find("Symm_Info")
     curr_symmID = symminfo.find("symid").text
-    if symminfo.find("attachment").text == 'Remote':
-        print(curr_symmID + " is not local ===== Skip")
+
+    if curr_symmID not in list_sym:
         continue
 
     MySymm = symmetrix.loadSymmetrixFromXML(symm)
