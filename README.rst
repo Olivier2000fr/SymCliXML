@@ -36,11 +36,26 @@ First install dependencies:
 Then download the code:
  $ git clone https://github.com/Olivier2000fr/SymCliXML
 
-Then go to the SymCliXML Directory:
+Then go to the SymCliXML Directory::
 
- $ python SymApiToExcel.py --help
+    $ python SymApiToExcel.py --help
+
+    usage: SymApiToExcel.py [-h] [-sid SID] [-symapi_dir SYMAPI_DIR] [-symapi_db SYMAPI_DB]
+
+    SympApiToExcel helps you to translate the configuration of a given Symmetrix to an XLS File. The program needs to have
+    symcli 9.1 installed and in your path, as well as a openpywl in your python installation.
+
+    optional arguments:
+    -h, --help            show this help message and exit
+    -sid SID              Allow you to precise a SID (needs to be fully precise as in the symapi)
+    -symapi_dir SYMAPI_DIR
+                        allow you to precise a directory whe the symapi_db's are located, symapi_dbs should be in the
+                        form symapi*.bin
+    -symapi_db SYMAPI_DB  allow you to precise a precise SYMAPI_DB.bin
+
 
 or if your symap_db_offline mode is correctory configured.
+
 
  $ python SymApiToExcel.py
 
