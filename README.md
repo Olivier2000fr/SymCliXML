@@ -1,19 +1,35 @@
-# SymCliXML
+Welcome to SymCliXML
+====================
+
+Overview
+--------
 
 The aim of this python script is to convert a Symapi_db.bin from Symmetrix (VMAX AFA or PowerMax) to an XLS File, 
 describing the box.
-
-Prequisites on your PC :
-=> Solutions Enable 9.1+
- - symcfg command has to be in your system path
-=> Python 3.x (developped in 3.8.6)
-=> git has to be installed and in you path
 
 The reference.xlsx is the description of the XLS result file with command (%%). 
 It is parsed and mapping from memroy structure to XLS are done this way.
 
 
-How to install
++-----------------------+----------------------------+
+| **Author**            | Olivier Guyot              |
++-----------------------+----------------------------+
+| **Unisphere Version** | 9.1.                       |
++-----------------------+----------------------------+
+| **Array Model**       | VMAX-3, VMAX AFA, PowerMax |
++-----------------------+----------------------------+
+| **Platforms**         | Linux, Windows             |
++-----------------------+----------------------------+
+| **Python**            | 3.8                        |
++-----------------------+----------------------------+
+| **Requires**          | openpyxl                   |
++-----------------------+----------------------------+
+
+
+
+Installation
+------------
+
 first install dependencies :
 pip install openpyxl
 (or pip3 depending of you python installation)
