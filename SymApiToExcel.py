@@ -16,19 +16,16 @@
 
 """
 
-import logging
-import copy
-from pathlib import Path
-import os
-import time
 import argparse
 import logging.config
-import subprocess, os
-import xml.etree.ElementTree as ET
-import openpyxl
 import math
-from openpyxl import Workbook
+import os
+import subprocess
+import time
+import xml.etree.ElementTree as ET
 from shutil import copyfile
+
+import openpyxl
 
 """
 Initialize logging
@@ -64,7 +61,7 @@ SymDevList = 'symdev list -sid %%sid%%  -v -out xml '
 SymCfgListMemory = 'symcfg -sid %%sid%%  list -memory -out xml'
 SymCfgListFa = 'symcfg -sid %%sid%%  list -fa all -v -out xml'
 SymCfgListRa = 'symcfg -sid %%sid%%  list -ra all -v -out xml'
-SymSnapvxListe ='symsnapvx -sid %%sid%% list -v -out xml'
+SymSnapvxListe = 'symsnapvx -sid %%sid%% list -v -out xml'
 SymSnapVXListDetails = 'symsnapvx -sid %%sid%% list -v -snapshot %%snap%% -dev 00001:FFFFF -detail -gb -out xml'
 SymcfgListEmulation = 'symcfg -sid %%sid%% list -dir all -out xml'
 Supported_Platform = ['VMAX100K','VMAX200K','VMAX400K','VMAX250F', 'VMAX950F', 'VMAX450F', 'VMAX850F', 'PowerMax_8000', 'PowerMax_2000']
@@ -79,12 +76,16 @@ class mesObjets:
     you will find static methoods for code refactoring (why do it 10 times when you can write once and call many (find / findall)
 
     You will also find toString methods that transform an object to string listing all attributes to string.
-    if an attrivute is a list, then data are not printed.
-
-
+    if an attribute is a list, then data are not printed.
     """
 
-    def toString(self):
+
+    def toString(self) -> str:
+        """
+        toString : put in a nice string all attributes of an object.
+
+        :return: A string cotaining all attributes and values of an object
+        """
         result = ""
         variables = self.__dict__.items()
         for variable, value in variables:
@@ -95,41 +96,59 @@ class mesObjets:
         return result
 
     def getValue(self, findV):
+        """
+        retrieve the value of a variable inside an object
+        :param findV:
+        :return: the value
+        """
         variables = self.__dict__.items()
         for variable, value in variables:
-            if (variable == findV):
+            if variable == findV:
                 return value
         return
 
     @staticmethod
-    def _runfind(toRun, toSearch) -> str:
+    def _runfind(toRun) -> str:
+        """
+        Static method that execute an external command and retrieve its output into a String
+        :param toRun: external command to run
+        :return: a String containt the output of the command
+        """
         logger.info("_runfind : " + toRun)
-        logger.info("_runfind : " + toSearch)
-        #my_env=os.environ
-        #if Symapifile:="None":
-        #    my_env.putenv("SYMCLI_DB_FILE", Symapifile)
-        #    print("TOTO")
-        #my_env.putenv("SYMCLI_OFFLINE","1")
-        #my_env.putenv("SYMCLI_SNAPVX_LIST_OFFLINE", "enabled")
         liste = subprocess.check_output(toRun, shell=True)
-
-        #liste = subprocess.check_output(toRun, shell=True,env=my_env)
         return liste
 
 
 
     @staticmethod
-    def runFindall(toRun, toSearch) -> list:
-        tableauXML = ET.fromstring(mesObjets._runfind(toRun, toSearch))
+    def runFindall(toRun, toSearch) -> [ET.Element]:
+        """
+        Execute a command, convert output on XML and find all keys corresponding to the search
+        :param toRun: output commant to Run
+        :param toSearch: the XML treee to parse and retrieve
+        :return: an XMLElement (kind of list).
+        """
+        tableauXML = ET.fromstring(mesObjets._runfind(toRun))
         return tableauXML.findall(toSearch)
 
     @staticmethod
-    def runFind(toRun, toSearch) -> list:
-        tableauXML = ET.fromstring(mesObjets._runfind(toRun, toSearch))
+    def runFind(toRun, toSearch) -> ET.Element:
+        """
+        Execute a command, convert output on XML and find 1 key corresponding to the search
+        :param toRun: output commant to Run
+        :param toSearch: the XML treee to parse and retrieve
+        :return: an XMLElement (kind of list).
+        """
+        tableauXML = ET.fromstring(mesObjets._runfind(toRun))
         return tableauXML.find(toSearch)
 
     @staticmethod
-    def ifNAtoInt(Value):
+    def ifNAtoInt(Value) -> int:
+        """
+        If value ="N/A", then return -1, if not return an int value of the value
+        :param Value:
+        :return:
+        """
         result = 0
         if (Value == "N/A"):
             result = -1
@@ -139,9 +158,14 @@ class mesObjets:
         return result
 
     @staticmethod
-    def ifNAtoFloat(Value):
+    def ifNAtoFloat(Value) -> float:
+        """
+        If value ="N/A", then return -1.0, if not return an float value of the value
+        :param Value:
+        :return:
+        """
         result = 0.0
-        if (Value == "N/A"):
+        if Value == "N/A":
             result = -1.0
         else:
             result = float(Value)
@@ -660,7 +684,7 @@ class tdev(mesObjets):
         newTdev.snapvx_target = Dev_Info.find("snapvx_target").text
 
         newTdev.emulation = Dev_Info.find("emulation").text
-        #print(newTdev.emulation)
+
 
         Dev_Info = details.find("Device_External_Identity")
         newTdev.wwn = Dev_Info.find("wwn").text
@@ -728,6 +752,10 @@ class tdev(mesObjets):
 # to move later
 #
 class symmetrix(mesObjets):
+    """
+    Top class object
+    The symmetrix is the top object. it has attributes (SID, ....) but also list of items (Snaps, ....)
+    """
     symid = ""
     attachment = ""
     product_model = ""
@@ -830,6 +858,10 @@ class symmetrix(mesObjets):
         srp = mesObjets.runFind(toRun, "Symmetrix")
 
         if newSymmtrix.product_model in ['VMAX100K','VMAX200K','VMAX400K']:
+            """
+            If VMAX3, data are not gathered at the same pliace
+            Some values are not also present, so put 0 in order to avaid later issues.
+            """
             toRun = SymCfgListSrp.replace('%%sid%%', newSymmtrix.symid)
             srp = mesObjets.runFind(toRun, "Symmetrix/SRP/SRP_Info")
 
@@ -850,6 +882,9 @@ class symmetrix(mesObjets):
             newSymmtrix.snapshot_cap_modified_percent = 0
             newSymmtrix.effective_used_cap_percent = (newSymmtrix.used_capacity_tb * 100)//newSymmtrix.usable_capacity_tb
         else:
+            #
+            # This is a VMAX AFA or a PowerMax, so it has the requirent info
+            #
             newSymmtrix.effective_used_cap_percent = mesObjets.ifNAtoInt(srp.find("effective_used_cap_percent").text)
             newSymmtrix.usable_capacity_tb = mesObjets.ifNAtoFloat(srp.find("usable_capacity_tb").text)
             newSymmtrix.user_used_capacity_tb = mesObjets.ifNAtoFloat(srp.find("user_used_capacity_tb").text)
@@ -885,14 +920,19 @@ class symmetrix(mesObjets):
         memory = mesObjets.runFindall(toRun, "Symmetrix/Memory_Board")
         newSymmtrix.nb_cache_raw_tb=0.0
         for board in memory:
+            #
+            # Welcome in try and guess ...
+            #
             val = float(board.find("capacity_in_mb").text)
             if val > 800000:
+                # 1TB cache director
                 newSymmtrix.nb_cache_raw_tb=newSymmtrix.nb_cache_raw_tb+1
             elif val > 400000:
+                # 512GB cache director
                 newSymmtrix.nb_cache_raw_tb = newSymmtrix.nb_cache_raw_tb + 0.5
             else:
+                # 256 GB cache director
                 newSymmtrix.nb_cache_raw_tb = newSymmtrix.nb_cache_raw_tb + 0.25
-        #print(newSymmtrix.nb_cache_raw_tb)
 
         #
         # Load devices
@@ -906,7 +946,7 @@ class symmetrix(mesObjets):
 
 
         #
-        # grab the FA pors (frontend FC emulation)
+        # grab the FA ports (frontend FC emulation)
         #
         newSymmtrix.list_fes=frontEndPorts.loadFromCommand(newSymmtrix.symid)
 
@@ -985,6 +1025,16 @@ def ListToXLS(feuille, Cell,chaine : str ,maListe : [mesObjets]):
             row_x = row_x + 1
 
 def whichSID() -> list:
+    """
+    Determines which SID shoulbe treated by this programm
+    It lists all available SID's in the symapi
+    List them on screen
+    and manage to get the ID you want to use
+    ALL = All ID's
+    QUIT = exit(0) of the program
+
+    :return: a list of SymmID
+    """
     list_sym=[]
     """
     Let's start
@@ -1151,10 +1201,17 @@ for symm in mesObjets.runFindall(SymcfgList, 'Symmetrix'):
     curr_symmID = symminfo.find("symid").text
 
     if curr_symmID not in list_sym:
+        """
+        Not in the list to process
+        """
         continue
+
     product_model = symminfo.find("product_model").text
 
     if product_model not in Supported_Platform:
+        """
+        Not Supported.
+        """
         print(product_model+" is not supported")
         continue
 
