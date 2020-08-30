@@ -14,7 +14,7 @@ It is parsed and mapping from memroy structure to XLS are done this way.
 +-----------------------+----------------------------+
 | **Author**            | Olivier Guyot              |
 +-----------------------+----------------------------+
-| **Unisphere Version** | 9.1.                       |
+| **Symcli version**    | 9.1                        |
 +-----------------------+----------------------------+
 | **Array Model**       | VMAX-3, VMAX AFA, PowerMax |
 +-----------------------+----------------------------+
@@ -30,15 +30,43 @@ It is parsed and mapping from memroy structure to XLS are done this way.
 Installation
 ------------
 
-first install dependencies :
-pip install openpyxl
-(or pip3 depending of you python installation)
+First install dependencies:
+ $ pip install openpyxl
 
-Then download the code
-git clone https://github.com/Olivier2000fr/SymCliXML
+Then download the code:
+ $ git clone https://github.com/Olivier2000fr/SymCliXML
 
-Then go to the SymCliXML Directory
+Then go to the SymCliXML Directory:
 
-python SymApiToExcel.py --help
+ $ python SymApiToExcel.py --help
 
-or python SymApiToExcel.py if your symap_db_offline mode is correctory configured.
+or if your symap_db_offline mode is correctory configured.
+
+ $ python SymApiToExcel.py
+
+exemple d'output::
+
+ $ C:/Users/guyoto/PycharmProjects/SymCliXML/SymApiToExcel.py -symapi_dir c:\temp\SYMAPI
+    Parameter : c:\temp\SYMAPI
+    0 - symapi_db.bin
+    1 - symapi_db_0064.bin
+    2 - symapi_db_0077.bin
+    3 - symapi_db_0106_240820.bin
+    4 - symapi_db_0107_250820.bin
+    5 - symapi_db_0109.bin
+
+    please enter the id of the symapi to process (0 to 5) or QUIT
+    which symapi id : 0
+
+    Selected Symapi is : c:\temp\SYMAPI\symapi_db.bin
+
+    List of discovered systems :
+    0 - 000297700XXX (Local) - VMAX950F
+    1 - 000297700YYY (Local) - VMAX950F
+    2 - 000297600ZZZ (Remote) - PowerMax_8000
+    3 - 000297600AAA (Remote) - PowerMax_8000
+    4 - 000297600BBB (Remote) - PowerMax_8000
+
+    please enter the system to process (0 to 4) or ALL or QUIT
+    which system to process :
+
