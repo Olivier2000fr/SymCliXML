@@ -1045,6 +1045,8 @@ parser = argparse.ArgumentParser(description="SympApiToExcel helps you to transl
 parser.add_argument('-sid',help='Allow you to precise a SID (needs to be fully precise as in the symapi)')
 parser.add_argument('-symapi_dir',help="allow you to precise a directory whe the symapi_db's are located, symapi_dbs should be in the form symapi*.bin",type=str)
 parser.add_argument('-symapi_db',help="allow you to precise a precise SYMAPI_DB.bin",type=str)
+parser.add_argument('-all',help="will run against all SYMIDs in the symapi_db",action="store_true")
+parser.add_argument('-local',help="will run against all local SYMIDs in the symapi_db",action="store_true")
 args = parser.parse_args()
 
 
@@ -1108,16 +1110,38 @@ if args.symapi_dir is not None:
     print("")
 
 
+list_sym = []
+if args.all:
+    print("Flag All selected.")
+    print("The following symmetrix will be audited :")
+    listSymm = smallSym.loadFromCommand()
+    for symm in listSymm:
+        print(symm.symmID)
+        list_sym.append(symm.symmID)
+
+if args.local:
+    print("Flag local selected.")
+    print("The following symmetrix will be audited :")
+    listSymm = smallSym.loadFromCommand()
+    for symm in listSymm:
+        if symm.attachement == "Local":
+            print(symm.symmID)
+            list_sym.append(symm.symmID)
+
 
 """
 Manage sid value
 """
-list_sym = []
+
 if args.sid is not None:
     print("Parameter : "+args.sid)
     list_sym.append(args.sid)
 else:
-    list_sym = whichSID()
+    if len(list_sym) == 0:
+        list_sym = whichSID()
+
+print("")
+print("")
 
 """
 Restart looping on all symmetrix and check if it is in the process list. If not skipp and try next one
