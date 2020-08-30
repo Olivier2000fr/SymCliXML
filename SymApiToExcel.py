@@ -695,7 +695,7 @@ class tdev(mesObjets):
                 newTdev.ports = newTdev.ports + port.find("director").text + "-" + port.find("port").text + ","
 
         rdfAll = details.findall("RDF")
-        nbRDF=0
+        nbRDF = 0
         if rdfAll is not None:
             for rdf in rdfAll:
                 rdf_info = rdf.find("RDF_Info")
@@ -723,9 +723,9 @@ class tdev(mesObjets):
                     newTdev.remote_symid_1 = remote.find("remote_symid").text
                     newTdev.remote_wwn_1 = remote.find("wwn").text
                     newTdev.remote_state_1 = remote.find("state").text
-                nbRDF=nbRDF+1
-                if nbRDF>2:
-                    print(newTdev.dev_name+" "+str(nbRDF)+" SRDF")
+                nbRDF = nbRDF+1
+                if nbRDF > 2:
+                    print(newTdev.dev_name+" has "+str(nbRDF)+" SRDF")
 
         return newTdev
 
@@ -1062,8 +1062,10 @@ def whichSID() -> list:
     print("")
     print("please enter the system to process (0 to " + str(len(listSymm) - 1) + ") or ALL or QUIT")
     answer = input("which system to process : ")
+    answer = answer.upper()
     while answer not in answer_list:
         answer = input("which system to process : ")
+        answer = answer.upper()
 
     """
     Now we have got an answer, let's process the answer
@@ -1142,8 +1144,10 @@ if args.symapi_dir is not None:
     print("")
     print("please enter the id of the symapi to process (0 to " + str(len(liste_symapi) - 1) + ") or QUIT")
     answer = input("which symapi id : ")
+    answer = answer.upper()
     while answer not in answer_list:
         answer = input("which symapi id : ")
+        answer=answer.upper()
 
     """
     Now we have got an answer, let's process the answer
@@ -1232,7 +1236,7 @@ for symm in mesObjets.runFindall(SymcfgList, 'Symmetrix'):
     #
     # open the file and start to work
     #
-    print("Populationg data in  : " + MySymm.symid + '.xlsx')
+    print("Populating data in  : " + MySymm.symid + '.xlsx')
     tip = time.time()
     classeur = openpyxl.load_workbook(MySymm.symid + '.xlsx')
     for feuille_name in classeur.sheetnames:

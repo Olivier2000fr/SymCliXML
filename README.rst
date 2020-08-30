@@ -11,30 +11,32 @@ The reference.xlsx is the description of the XLS result file with command (%%).
 It is parsed and mapping from memroy structure to XLS are done this way.
 
 
-+-----------------------+----------------------------+
-| **Author**            | Olivier Guyot              |
-+-----------------------+----------------------------+
-| **Symcli version**    | 9.1                        |
-+-----------------------+----------------------------+
-| **Array Model**       | VMAX-3, VMAX AFA, PowerMax |
-+-----------------------+----------------------------+
-| **Platforms**         | Linux, Windows             |
-+-----------------------+----------------------------+
-| **Python**            | 3.8                        |
-+-----------------------+----------------------------+
-| **Requires**          | openpyxl                   |
-+-----------------------+----------------------------+
++-----------------------+-------------------------------------------+
+| **Author**            | Olivier Guyot (olivier.guyot2@gmail.com)  |
++-----------------------+-------------------------------------------+
+| **Symcli version**    | 9.1                                       |
++-----------------------+-------------------------------------------+
+| **Array Model**       | VMAX-3, VMAX AFA, PowerMax                |
++-----------------------+-------------------------------------------+
+| **Platforms**         | Linux, Windows                            |
++-----------------------+-------------------------------------------+
+| **Python**            | 3.8                                       |
++-----------------------+-------------------------------------------+
+| **Requires**          | openpyxl                                  |
++-----------------------+-------------------------------------------+
 
 
 
 Installation
 ------------
 
-First install dependencies:
- $ pip install openpyxl
+First install dependencies::
 
-Then download the code:
- $ git clone https://github.com/Olivier2000fr/SymCliXML
+    $ pip install openpyxl
+
+Then download the code::
+
+    $ git clone https://github.com/Olivier2000fr/SymCliXML
 
 Then go to the SymCliXML Directory::
 
