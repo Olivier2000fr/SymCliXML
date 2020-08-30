@@ -20,11 +20,13 @@ import logging
 import copy
 from pathlib import Path
 import os
+import time
 import argparse
 import logging.config
 import subprocess, os
 import xml.etree.ElementTree as ET
 import openpyxl
+import math
 from openpyxl import Workbook
 from shutil import copyfile
 
@@ -890,7 +892,7 @@ class symmetrix(mesObjets):
                 newSymmtrix.nb_cache_raw_tb = newSymmtrix.nb_cache_raw_tb + 0.5
             else:
                 newSymmtrix.nb_cache_raw_tb = newSymmtrix.nb_cache_raw_tb + 0.25
-        print(newSymmtrix.nb_cache_raw_tb)
+        #print(newSymmtrix.nb_cache_raw_tb)
 
         #
         # Load devices
@@ -1132,9 +1134,12 @@ for symm in mesObjets.runFindall(SymcfgList, 'Symmetrix'):
         print(product_model+" is not supported")
         continue
 
-
+    print("loading symmetrix data from Symapi  : "+curr_symmID)
+    tip = time.time()
     MySymm = symmetrix.loadSymmetrixFromXML(symm)
-    print(MySymm.toString())
+    top = time.time()
+    print("Done in "+str(math.ceil(top-tip))+" sec")
+    logger.info(MySymm.toString())
 
     """
     Let's manage the output.
@@ -1146,6 +1151,8 @@ for symm in mesObjets.runFindall(SymcfgList, 'Symmetrix'):
     #
     # open the file and start to work
     #
+    print("Populationg data in  : " + MySymm.symid + '.xlsx')
+    tip = time.time()
     classeur = openpyxl.load_workbook(MySymm.symid + '.xlsx')
     for feuille_name in classeur.sheetnames:
         #
@@ -1171,9 +1178,12 @@ for symm in mesObjets.runFindall(SymcfgList, 'Symmetrix'):
     # Save File
     #
     classeur.save(MySymm.symid + '.xlsx')
+    top = time.time()
+    print("Done in " + str(math.ceil(top - tip)) + " sec \n\n")
 
     #    for child in symm:
     #        print(child.tag, child.attrib)
 
 
+print("Finally finished")
 logger.info("End")
