@@ -20,6 +20,7 @@ import logging
 import copy
 from pathlib import Path
 import os
+import argparse
 import logging.config
 import subprocess, os
 import xml.etree.ElementTree as ET
@@ -67,6 +68,8 @@ SymcfgListEmulation = 'symcfg -sid %%sid%% list -dir all -out xml'
 Supported_Platform = ['VMAX100K','VMAX200K','VMAX400K','VMAX250F', 'VMAX950F', 'VMAX450F', 'VMAX850F', 'PowerMax_8000', 'PowerMax_2000']
 
 
+
+
 class mesObjets:
     """
     meObjets : mother class for all custom objects.
@@ -101,11 +104,14 @@ class mesObjets:
         logger.info("_runfind : " + toRun)
         logger.info("_runfind : " + toSearch)
         #my_env=os.environ
+        #if Symapifile:="None":
+        #    my_env.putenv("SYMCLI_DB_FILE", Symapifile)
+        #    print("TOTO")
         #my_env.putenv("SYMCLI_OFFLINE","1")
         #my_env.putenv("SYMCLI_SNAPVX_LIST_OFFLINE", "enabled")
-        #liste = subprocess.check_output(toRun, shell=True,env=my_env)
-
         liste = subprocess.check_output(toRun, shell=True)
+
+        #liste = subprocess.check_output(toRun, shell=True,env=my_env)
         return liste
 
 
@@ -940,7 +946,7 @@ class smallSym(mesObjets):
             if mySym.product_model in Supported_Platform:
                 symList.append(mySym)
             else:
-                print("skip unsupported system "+mySym.symmID+" / "+ mySym.product_model)
+                #print("skip unsupported system "+mySym.symmID+" / "+ mySym.product_model)
                 logger.info("skip unsupported system "+mySym.symmID+" / "+ mySym.product_model)
         return symList
 
@@ -976,96 +982,195 @@ def ListToXLS(feuille, Cell,chaine : str ,maListe : [mesObjets]):
             celltoupd.value = elt.getValue(Attributes)
             row_x = row_x + 1
 
+def whichSID() -> list:
+    list_sym=[]
+    """
+    Let's start
+    Step 1 : Gather all available (and supported) SID's
+    Step 2 : Print Them
+    Step 3 : loop until you get a decent answer
 
+    """
+    listSymm = smallSym.loadFromCommand()
+    print("List of discovered systems : ")
 
+    pos = 0
+    answer_list = []
+    answer_list.append("ALL")
+    answer_list.append("QUIT")
+    while pos < len(listSymm):
+        answer_list.append((str(pos)))
+        pos = pos + 1
 
-# 'application' code
-logger.info("Start")
-
-listSymm = smallSym.loadFromCommand()
-print("List of discovered systems : ")
-
-pos = 0
-answer_list=[]
-answer_list.append("ALL")
-answer_list.append("QUIT")
-while pos < len(listSymm):
-    answer_list.append((str(pos)))
-    pos=pos+1
-
-pos = 0
-for smallsym in listSymm:
-    print(str(pos)+' - ' + smallsym.symmID + ' (' + smallsym.attachement + ') - ' + smallsym.product_model)
-    pos = pos+1
-
-print("")
-print("please enter the system to process (0 to "+str(len(listSymm)-1)+") or ALL or QUIT")
-answer = input("which system to process : ")
-while answer not in answer_list:
-    answer = input("which system to process : ")
-
-if answer == 'QUIT':
-    print("")
-    logger.info("This is the end")
-    exit(0)
-
-list_sym = []
-
-if answer == "ALL":
+    pos = 0
     for smallsym in listSymm:
-        list_sym.append(smallsym.symmID)
+        print(str(pos) + ' - ' + smallsym.symmID + ' (' + smallsym.attachement + ') - ' + smallsym.product_model)
+        pos = pos + 1
+
+    print("")
+    print("please enter the system to process (0 to " + str(len(listSymm) - 1) + ") or ALL or QUIT")
+    answer = input("which system to process : ")
+    while answer not in answer_list:
+        answer = input("which system to process : ")
+
+    """
+    Now we have got an answer, let's process the answer
+    """
+    if answer == 'QUIT':
+        print("")
+        logger.info("This is the end")
+        exit(0)
+
+    list_sym = []
+
+    if answer == "ALL":
+        for smallsym in listSymm:
+            list_sym.append(smallsym.symmID)
+    else:
+        list_sym.append(listSymm[int(answer)].symmID)
+    return list_sym
+
+"""
+
+MAIN STARTS HERE
+
+"""
+logger.info("Start")
+"""
+Process the arguments
+"""
+parser = argparse.ArgumentParser(description="SympApiToExcel helps you to translate the configuration of a given Symmetrix to an XLS File.\n\nThe program needs to have symcli 9.1 installed and in your path, as well as a openpywl in your python installation.")
+parser.add_argument('-sid',help='Allow you to precise a SID (needs to be fully precise as in the symapi)')
+parser.add_argument('-symapi_dir',help="allow you to precise a directory whe the symapi_db's are located, symapi_dbs should be in the form symapi*.bin",type=str)
+parser.add_argument('-symapi_db',help="allow you to precise a precise SYMAPI_DB.bin",type=str)
+args = parser.parse_args()
+
+
+"""
+Update system Variables for offline symcli.
+"""
+my_vars = {'SYMCLI_OFFLINE': "1"}
+os.environ.update(my_vars)
+my_vars = {'SYMCLI_SNAPVX_LIST_OFFLINE': "enabled"}
+os.environ.update(my_vars)
+
+"""
+Process the symapi_db parameter
+"""
+if args.symapi_db is not None:
+    print("Parameter : "+args.symapi_db)
+    my_vars = {'SYMCLI_DB_FILE': args.symapi_db}
+    os.environ.update(my_vars)
+
+
+
+"""
+Process the symapi_dir
+"""
+if args.symapi_dir is not None:
+    print("Parameter : "+args.symapi_dir)
+    liste_symapi=[]
+    for file in [f for f in os.listdir(args.symapi_dir)]:
+        if file.lower().startswith("symapi"):
+            if file.lower().endswith(".bin"):
+                liste_symapi.append(file)
+    pos = 0
+    answer_list = []
+    answer_list.append("QUIT")
+    while pos < len(liste_symapi):
+        answer_list.append((str(pos)))
+        pos = pos + 1
+    pos = 0
+    for file in liste_symapi:
+        print(str(pos)+" - "+file)
+        pos = pos + 1
+
+    print("")
+    print("please enter the id of the symapi to process (0 to " + str(len(liste_symapi) - 1) + ") or QUIT")
+    answer = input("which symapi id : ")
+    while answer not in answer_list:
+        answer = input("which symapi id : ")
+
+    """
+    Now we have got an answer, let's process the answer
+    """
+    if answer == 'QUIT':
+        print("")
+        logger.info("This is the end")
+        exit(0)
+    print("")
+    Symapifile=args.symapi_dir+os.path.sep+liste_symapi[int(answer)]
+    print("Selected Symapi is : " + Symapifile)
+    my_vars = {'SYMCLI_DB_FILE': Symapifile}
+    os.environ.update(my_vars)
+    print("")
+
+
+
+"""
+Manage sid value
+"""
+list_sym = []
+if args.sid is not None:
+    print("Parameter : "+args.sid)
+    list_sym.append(args.sid)
 else:
-    list_sym.append(listSymm[int(answer)].symmID)
+    list_sym = whichSID()
 
-
+"""
+Restart looping on all symmetrix and check if it is in the process list. If not skipp and try next one
+"""
 for symm in mesObjets.runFindall(SymcfgList, 'Symmetrix'):
     symminfo = symm.find("Symm_Info")
     curr_symmID = symminfo.find("symid").text
 
     if curr_symmID not in list_sym:
         continue
+    product_model = symminfo.find("product_model").text
+
+    if product_model not in Supported_Platform:
+        print(product_model+" is not supported")
+        continue
+
 
     MySymm = symmetrix.loadSymmetrixFromXML(symm)
     print(MySymm.toString())
 
-    if MySymm.product_model in Supported_Platform:
+    """
+    Let's manage the output.
+    """
+    #
+    # Copy XLS
+    #
+    copyfile("reference.xlsx", MySymm.symid + '.xlsx')
+    #
+    # open the file and start to work
+    #
+    classeur = openpyxl.load_workbook(MySymm.symid + '.xlsx')
+    for feuille_name in classeur.sheetnames:
         #
-        # Copy XLS
+        # On parcourt les pages
         #
-        copyfile("reference.xlsx", MySymm.symid + '.xlsx')
+        feuille = classeur[feuille_name]
+        for ligne in feuille.iter_rows():
+            for cell in ligne:
+                #
+                # Analyse et travaille ici
+                #
+                objectToXLS(cell,"%%sym.",MySymm)
+                ListToXLS(feuille,cell,"%%list.disks.",MySymm.list_disks)
+                ListToXLS(feuille, cell, "%%list.tdevs.", MySymm.list_devices)
+                ListToXLS(feuille, cell, "%%list.sgs.", MySymm.list_sgs)
+                ListToXLS(feuille, cell, "%%list.fes.", MySymm.list_fes)
+                ListToXLS(feuille, cell, "%%list.ras.", MySymm.list_ras)
+                ListToXLS(feuille, cell, "%%list.sm.", MySymm.list_sm)
+                ListToXLS(feuille, cell, "%%list.sd.", MySymm.list_sd)
+                ListToXLS(feuille, cell, "%%list.emu.", MySymm.list_emu)
 
-        #
-        # open the file and start to work
-        #
-
-        classeur = openpyxl.load_workbook(MySymm.symid + '.xlsx')
-
-        for feuille_name in classeur.sheetnames:
-            #
-            # On parcourt les pages
-            #
-            feuille = classeur[feuille_name]
-            for ligne in feuille.iter_rows():
-                for cell in ligne:
-                    #
-                    # Analyse et travaille ici
-                    #
-                    objectToXLS(cell,"%%sym.",MySymm)
-                    ListToXLS(feuille,cell,"%%list.disks.",MySymm.list_disks)
-                    ListToXLS(feuille, cell, "%%list.tdevs.", MySymm.list_devices)
-                    ListToXLS(feuille, cell, "%%list.sgs.", MySymm.list_sgs)
-                    ListToXLS(feuille, cell, "%%list.fes.", MySymm.list_fes)
-                    ListToXLS(feuille, cell, "%%list.ras.", MySymm.list_ras)
-                    ListToXLS(feuille, cell, "%%list.sm.", MySymm.list_sm)
-                    ListToXLS(feuille, cell, "%%list.sd.", MySymm.list_sd)
-                    ListToXLS(feuille, cell, "%%list.emu.", MySymm.list_emu)
-
-        #
-        # Save File
-        #
-        classeur.save(MySymm.symid + '.xlsx')
-    else:
-        print(MySymm.symid + " is not supported ===== Skip")
+    #
+    # Save File
+    #
+    classeur.save(MySymm.symid + '.xlsx')
 
     #    for child in symm:
     #        print(child.tag, child.attrib)
