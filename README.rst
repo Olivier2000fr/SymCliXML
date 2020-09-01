@@ -20,7 +20,7 @@ It is parsed and mapping from memroy structure to XLS are done this way.
 +-----------------------+-------------------------------------------+
 | **Platforms**         | Linux, Windows                            |
 +-----------------------+-------------------------------------------+
-| **Python**            | 3.8                                       |
+| **Python**            | 3.8 (tested)                              |
 +-----------------------+-------------------------------------------+
 | **Requires**          | openpyxl                                  |
 +-----------------------+-------------------------------------------+
@@ -58,12 +58,11 @@ Then go to the SymCliXML Directory::
     -all                  will run against all SYMIDs in the symapi_db
     -local                will run against all local SYMIDs in the symapi_db
 
-or if your symap_db_offline mode is correctory configured.
-
+or if your symap_db_offline mode is correctory configured::
 
  $ python SymApiToExcel.py
 
-exemple d'output::
+Output Example::
 
  $ C:/Users/guyoto/PycharmProjects/SymCliXML/SymApiToExcel.py -symapi_dir c:\temp\SYMAPI
     Parameter : c:\temp\SYMAPI
