@@ -151,7 +151,7 @@ class mesObjets:
         """
         result = 0
         if (Value == "N/A"):
-            result = -1
+            result = 0
         else:
             result = int(Value)
 
@@ -166,7 +166,7 @@ class mesObjets:
         """
         result = 0.0
         if Value == "N/A":
-            result = -1.0
+            result = 0.0
         else:
             result = float(Value)
 
@@ -901,6 +901,8 @@ class symmetrix(mesObjets):
             newSymmtrix.snapshot_cap_nonshared_tb = mesObjets.ifNAtoFloat(srp.find("snapshot_cap_nonshared_tb").text)
             newSymmtrix.snapshot_cap_shared_tb = mesObjets.ifNAtoFloat(srp.find("snapshot_cap_shared_tb").text)
             newSymmtrix.snapshot_cap_modified_percent = mesObjets.ifNAtoInt(srp.find("snapshot_cap_modified_percent").text)
+            #newSymmtrix.used_capacity_tb = newSymmtrix.user_used_capacity_tb + newSymmtrix.system_used_capacity_tb + newSymmtrix.snapshot_cap_nonshared_tb
+
 
 
 
