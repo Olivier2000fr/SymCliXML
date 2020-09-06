@@ -11,8 +11,6 @@
  TODO :
   Rajouter l'information sur le TDEV de montage d'un snap (ID destiantion). PAS D'idée pour le moment
   Rajouter les flgas sur les SG
-  Gérer les réplications SRDF multiples (passer à 2 mini).
-
 
 """
 
