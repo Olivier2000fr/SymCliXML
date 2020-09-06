@@ -64,6 +64,7 @@ SymCfgListRa = 'symcfg -sid %%sid%%  list -ra all -v -out xml'
 SymSnapvxListe = 'symsnapvx -sid %%sid%% list -v -out xml'
 SymSnapVXListDetails = 'symsnapvx -sid %%sid%% list -v -snapshot %%snap%% -dev 00001:FFFFF -detail -gb -out xml'
 SymcfgListEmulation = 'symcfg -sid %%sid%% list -dir all -out xml'
+SymcfgListPool = 'symcfg list -sid %%sid%% -pool -thin -out xml'
 Supported_Platform = ['VMAX100K','VMAX200K','VMAX400K','VMAX250F', 'VMAX950F', 'VMAX450F', 'VMAX850F', 'PowerMax_8000', 'PowerMax_2000']
 
 
@@ -888,8 +889,9 @@ class symmetrix(mesObjets):
             newSymmtrix.effective_used_cap_percent = mesObjets.ifNAtoInt(srp.find("effective_used_cap_percent").text)
             newSymmtrix.usable_capacity_tb = mesObjets.ifNAtoFloat(srp.find("usable_capacity_tb").text)
             newSymmtrix.user_used_capacity_tb = mesObjets.ifNAtoFloat(srp.find("user_used_capacity_tb").text)
-            newSymmtrix.used_capacity_tb = mesObjets.ifNAtoFloat(srp.find("used_capacity_tb").text)
-            newSymmtrix.free_capacity_tb = newSymmtrix.usable_capacity_tb - newSymmtrix.used_capacity_tb
+            #newSymmtrix.used_capacity_tb = mesObjets.ifNAtoFloat(srp.find("used_capacity_tb").text)
+            # Used capcity in the output XML is messy
+            # change it to go to list pool
             newSymmtrix.subscribed_capacity_tb = mesObjets.ifNAtoFloat(srp.find("subscribed_capacity_tb").text)
             newSymmtrix.system_used_capacity_tb = mesObjets.ifNAtoFloat(srp.find("system_used_capacity_tb").text)
             newSymmtrix.temp_used_capacity_tb = mesObjets.ifNAtoFloat(srp.find("temp_used_capacity_tb").text)
@@ -901,7 +903,15 @@ class symmetrix(mesObjets):
             newSymmtrix.snapshot_cap_nonshared_tb = mesObjets.ifNAtoFloat(srp.find("snapshot_cap_nonshared_tb").text)
             newSymmtrix.snapshot_cap_shared_tb = mesObjets.ifNAtoFloat(srp.find("snapshot_cap_shared_tb").text)
             newSymmtrix.snapshot_cap_modified_percent = mesObjets.ifNAtoInt(srp.find("snapshot_cap_modified_percent").text)
-            #newSymmtrix.used_capacity_tb = newSymmtrix.user_used_capacity_tb + newSymmtrix.system_used_capacity_tb + newSymmtrix.snapshot_cap_nonshared_tb
+            #
+            #
+            #
+            #
+            toRun = SymcfgListPool.replace('%%sid%%',newSymmtrix.symid)
+            listpool = mesObjets.runFind(toRun,"Symmetrix/Totals")
+            newSymmtrix.used_capacity_tb = listpool.find("total_used_tracks_tb").text
+            newSymmtrix.free_capacity_tb = listpool.find("total_free_tracks_tb").text
+            newSymmtrix.user_used_capacity_tb = float(newSymmtrix.used_capacity_tb) - newSymmtrix.system_used_capacity_tb - newSymmtrix.temp_used_capacity_tb - newSymmtrix.snapshot_cap_nonshared_tb
 
 
 
