@@ -15,6 +15,10 @@
 import logging.config
 import argparse
 import xml.etree.ElementTree as ET
+from shutil import copyfile
+import time
+import openpyxl
+import math
 
 
 """
@@ -70,6 +74,22 @@ class mesObjets:
                 return value
         return
 
+class vplexPort(mesObjets):
+    PortName = ""
+    PortWWN = ""
+    NumberExportedVolumes = 0
+
+
+    @staticmethod
+    def loadFromXML(XMLString):
+        port = vplexPort()
+        port.PortName = XMLString.find("PortName").text.strip()
+        port.PortWWN = XMLString.find("PortWWN").text.strip()
+        port.NumberExportedVolumes = int(XMLString.find("NumberExportedVolumes").text)
+
+        return port
+
+
 class storageArray(mesObjets):
     VendorID = ""
     ProductID = ""
@@ -105,7 +125,29 @@ class vplex(mesObjets):
     engineCount = 0
     operationalStatus = ""
     healthState = ""
+    healthIndications = ""
     list_storageA = []
+    list_feports = []
+    list_feportsA = []
+    list_feportsB = []
+    NumberViews = 0
+    NumberInitiatorPorts = 0
+    ClaimedCapacity = ""
+    StorageVolumes = 0
+    nbRaid0Devices = 0
+    nbRaidCDevices = 0
+    nbRaid1Devices = 0
+    nbDistributedDevices = 0
+    nbRemoteFrom = 0
+    nbExportedVV = 0
+    nbLocalCG = 0
+    nbDistributedCG = 0
+    modelType = ""
+    seed_id = ""
+    version = ""
+    siteID = ""
+
+
 
 
     @staticmethod
@@ -119,16 +161,96 @@ class vplex(mesObjets):
         MyVPlex.engineCount = int(MyVPlex.directorCount/2)
         MyVPlex.operationalStatus = ClusterAttributes.find("operational-status").text.strip()
         MyVPlex.healthState=ClusterAttributes.find("health-state").text.strip()
+        MyVPlex.healthIndications = ClusterAttributes.find("health-indications").text.strip()
+
+
+        views = XMLString.find("Views")
+
+        MyVPlex.NumberViews = views.find("NumberViews").text.strip()
+        MyVPlex.NumberInitiatorPorts = views.find("NumberInitiatorPorts").text.strip()
+
+        portlist = views.find("PortList")
+        MyVPlex.list_feports = []
+        MyVPlex.list_feportsA = []
+        MyVPlex.list_feportsB = []
+        for elt in portlist.findall("Port"):
+            port = vplexPort.loadFromXML(elt)
+            MyVPlex.list_feports.append(port)
+            if port.PortName.find("-A0-FC") > 0:
+                MyVPlex.list_feportsA.append(port)
+            else:
+                MyVPlex.list_feportsB.append(port)
+
 
         MyVPlex.list_storageA=[]
         for elt in XMLString.findall("Storage/ArrayList/Array"):
             MyVPlex.list_storageA.append(storageArray.loadFromXML(elt))
             #print(storageArray.loadFromXML(elt).toString())
 
+        stvolumes = XMLString.find("StorageVolumes/thin-rebuild")
+        MyVPlex.ClaimedCapacity = stvolumes.find("ClaimedCapacity").text.strip()
+        MyVPlex.StorageVolumes = int(stvolumes.find("Count").text.strip())
 
+        raid = XMLString.find("DeviceSummary/Raid0")
+        MyVPlex.nbRaid0Devices = int(raid.find("NumberDevices").text)
 
+        raid = XMLString.find("DeviceSummary/RaidC")
+        MyVPlex.nbRaidCDevices = int(raid.find("NumberDevices").text)
+
+        raid = XMLString.find("DeviceSummary/Raid1")
+        MyVPlex.nbRaid1Devices = int(raid.find("NumberDevices").text)
+
+        raid = XMLString.find("DeviceSummary/Distributed")
+        MyVPlex.nbDistributedDevices = int(raid.find("ClusterNumberDistributedDevices").text)
+
+        MyVPlex.nbRemoteFrom = int(raid.find("RemoteExportsFromThisCluster").text)
+        MyVPlex.nbExportedVV = int(XMLString.find("NumberOfExportedVV").text)
+
+        todo = XMLString.find("ConsistencyGroups/Local")
+        MyVPlex.nbLocalCG = int(todo.find("NumberCGs").text)
+
+        todo = XMLString.find("ConsistencyGroups/DistributedSync")
+        MyVPlex.nbDistributedCG = int(todo.find("NumberCGs").text)
+
+        chassis = XMLString.findall("ChassisList/Chassis")[0]
+        MyVPlex.modelType = "UNK"
+        if chassis.find("ChassisType").text.strip() == "VPL":
+            MyVPlex.modelType="VS6"
+        if chassis.find("ChassisType").text.strip() == "Argonaut":
+            MyVPlex.modelType = "VS2"
+        MyVPlex.seed_id = chassis.find("ChassisWWNSeed").text.strip()
+
+        for iom in chassis.findall("IOModuleList/IOModule"):
+            print(iom.find("Name").text.strip()+" - "+iom.find("Type").text.strip())
 
         return MyVPlex
+
+
+def objectToXLS(Cell,chaine : str ,monObject : mesObjets):
+    if str(cell.value).startswith(chaine):
+        #
+        # Manage Sym Data
+        #
+        Attributes = str(cell.value).replace(chaine, "")
+        cell.value = monObject.getValue(Attributes)
+
+def ListToXLS(feuille, Cell,chaine : str ,maListe : [mesObjets]):
+    if str(cell.value).startswith(chaine):
+        #
+        # Manage Liste of disks
+        #
+        Attributes = str(cell.value).replace(chaine, "")
+        row_x = cell.row
+        column_y = cell.column
+        for elt in maListe:
+            #
+            # on écrit de bas en haut.
+            #
+            celltoupd = feuille.cell(row=row_x, column=column_y)
+            celltoupd.value = elt.getValue(Attributes)
+            row_x = row_x + 1
+
+
 
 logger.info("Start VPLEX")
 FileToProcess=""
@@ -153,25 +275,73 @@ else:
 
 XMLStr=open(FileToProcess, 'r').read()
 # clean \n
-XMLStr=XMLStr.replace('\n', '')
+XMLStr = XMLStr.replace('\n', '')
 
 #
 # Make it XML
 tableauXML = ET.fromstring(XMLStr)
+versionXML = tableauXML.find("Version")
+SystemID = tableauXML.find("SystemID").text.strip()
 
 
 #
 # Is this a Metro ?
 TypeVPLEX = tableauXML.find("productType").text.strip()
 
-print(TypeVPLEX)
 
+print(TypeVPLEX)
+list_vplex=[]
 
 for nodeXML in tableauXML.findall("ClusterList/Cluster"):
     MyVPLEX = vplex.loadFromXML(nodeXML)
+    if MyVPLEX.clusterTLA == SystemID:
+        MyVPLEX.version = versionXML.find("ProductVersion").text.strip()
+        MyVPLEX.siteID = tableauXML.find("CSISiteID").text.strip()
+    list_vplex.append(MyVPLEX)
     print(MyVPLEX.toString())
 
+#
+# Copy XLS
+#
+dest_file_name=""
+if TypeVPLEX == "Local":
+    dest_file_name = list_vplex[0].clusterTLA + '.xlsx'
+if TypeVPLEX == "Metro":
+    dest_file_name=list_vplex[0].clusterTLA+"_"+list_vplex[1].clusterTLA+ '.xlsx'
 
+copyfile("referenceVplexMetro.xlsx", dest_file_name)
+#
+# open the file and start to work
+#
+print("Populating data in  : " + dest_file_name)
+tip = time.time()
+classeur = openpyxl.load_workbook(dest_file_name)
+for feuille_name in classeur.sheetnames:
+    #
+    # On parcourt les pages
+    #
+    feuille = classeur[feuille_name]
+    for ligne in feuille.iter_rows():
+        for cell in ligne:
+            #
+            # Analyse et travaille ici
+            #
+            objectToXLS(cell,"%%vplex1.",list_vplex[0])
+            ListToXLS(feuille,cell,"%%listSto.vplex1.",list_vplex[0].list_storageA)
+            ListToXLS(feuille, cell, "%%listFeDirA.vplex1.", list_vplex[0].list_feportsA)
+            ListToXLS(feuille, cell, "%%listFeDirB.vplex1.", list_vplex[0].list_feportsB)
+            if TypeVPLEX == "Metro":
+                objectToXLS(cell, "%%vplex2.", list_vplex[1])
+                ListToXLS(feuille, cell, "%%listSto.vplex2.", list_vplex[1].list_storageA)
+                ListToXLS(feuille, cell, "%%listFeDirA.vplex2.", list_vplex[1].list_feportsA)
+                ListToXLS(feuille, cell, "%%listFeDirB.vplex2.", list_vplex[1].list_feportsB)
+
+    #
+    # Save File
+    #
+    classeur.save(dest_file_name)
+    top = time.time()
+    print("Done in " + str(math.ceil(top - tip)) + " sec \n\n")
 
 
 logger.info("End VPLEX")
